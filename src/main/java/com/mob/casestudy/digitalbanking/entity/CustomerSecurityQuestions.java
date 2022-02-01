@@ -1,11 +1,10 @@
 package com.mob.casestudy.digitalbanking.entity;
 
-import com.mob.casestudy.digitalbanking.dto.CustomerSecurityQuestionsDto;
+import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
 import com.mob.casestudy.digitalbanking.embedded.CustomerSecQuestion;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 public class CustomerSecurityQuestions {
@@ -87,8 +86,9 @@ public class CustomerSecurityQuestions {
         this.securityQuestions = securityQuestions;
     }
 
-    public CustomerSecurityQuestionsDto toDto() {
+    public SecurityQuestionsDto toDto() {
 
-        return new CustomerSecurityQuestionsDto(securityQuestions.getId(), securityQuestions.getSecurityQuestionText(), securityQuestionAnswer);
+        return new SecurityQuestionsDto(securityQuestions.getId().toString(), securityQuestions.getSecurityQuestionText(), securityQuestionAnswer);
     }
+
 }

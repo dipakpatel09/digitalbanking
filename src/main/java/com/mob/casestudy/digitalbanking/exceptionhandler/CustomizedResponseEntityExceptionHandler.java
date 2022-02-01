@@ -1,17 +1,16 @@
-package com.mob.casestudy.digitalbanking.exception;
+package com.mob.casestudy.digitalbanking.exceptionhandler;
 
+import com.mob.casestudy.digitalbanking.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
-@RestController
+@RestControllerAdvice
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
@@ -26,10 +25,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
-    @ExceptionHandler(CustomerNotFoundException.class)
-    public final ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-005", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    @ExceptionHandler(ValidationFailedException.class)
+    public final ResponseEntity<Object> handleValidationFailedException(ValidationFailedException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-001", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
     @ExceptionHandler(CustomerQuestionNotFoundException.class)
@@ -38,16 +37,21 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ValidationFailedException.class)
-    public final ResponseEntity<Object> handleValidationFailedException(ValidationFailedException ex, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-001", ex.getMessage());
+    @ExceptionHandler(CustomerQuestionSizeNotValidException.class)
+    public final ResponseEntity<Object> handleCustomerQuestionException(CustomerQuestionSizeNotValidException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-004", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public final ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-005", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-002", ex.getBindingResult().toString());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

@@ -1,8 +1,8 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
+import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityQuestions;
-import org.junit.jupiter.api.Assertions;
+import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,25 +10,29 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.time.LocalDateTime;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerSecurityQuestionsServiceTest {
 
-    @InjectMocks
-    CustomerSecurityQuestionsService customerSecurityQuestionsService;
-
     @Mock
     CustomerSecurityQuestionsRepo customerSecurityQuestionsRepo;
 
+    @InjectMocks
+    CustomerSecurityQuestionsService customerSecurityQuestionsService;
+
     @Test
-    void deleteCustomerSecurityQuestions_withValidList_shouldDeleteQuestions() {
+    void deleteCustomerQuestion_withEmptyCustomerQuestion_shouldThrowException() {
+        Customer customer=new Customer();
+        customerSecurityQuestionsService.deleteCustomerQuestion(customer);
+        Mockito.verify(customerSecurityQuestionsRepo,Mockito.times(0)).deleteAll();
+    }
 
-        List<CustomerSecurityQuestions> questions=new ArrayList<>();
-        customerSecurityQuestionsService.deleteCustomerSecurityQuestions(questions);
-        Mockito.verify(customerSecurityQuestionsRepo).deleteAll(questions);
-
+    @Test
+    void deleteCustomerQuestion_withValidCustomerQuestion_shouldDeleteExistingCustomerQuestion() {
+        Customer customer=new Customer();
+        customer.addCustomerSecurityQuestions(new CustomerSecurityQuestions("abc", LocalDateTime.now()));
+        customerSecurityQuestionsService.deleteCustomerQuestion(customer);
+        Mockito.verify(customerSecurityQuestionsRepo).deleteAll();
     }
 }
