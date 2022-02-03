@@ -31,7 +31,7 @@ class CustomerSecurityQuestionsServiceTest {
     @Test
     void deleteCustomerQuestion_withValidCustomerQuestion_shouldDeleteExistingCustomerQuestion() {
         Customer customer=new Customer();
-        customer.addCustomerSecurityQuestions(new CustomerSecurityQuestions("abc", LocalDateTime.now()));
+        customer.addCustomerSecurityQuestions(new CustomerSecurityQuestions("Ahmedabad", LocalDateTime.now()));
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
         Mockito.verify(customerSecurityQuestionsRepo).deleteAll();
     }

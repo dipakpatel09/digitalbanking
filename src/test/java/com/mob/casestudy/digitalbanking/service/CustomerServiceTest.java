@@ -1,7 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
 import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDtoList;
+import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
 import com.mob.casestudy.digitalbanking.exception.UserNotFoundException;
@@ -46,7 +46,7 @@ class CustomerServiceTest {
 
     @Test
     void deleteCustomer_withValidCustomer_shouldDeleteExistingCustomer(){
-        String username="Naitik";
+        String userName="Naitik";
         Customer customer = new Customer();
         CustomerOTP customerOTP=new CustomerOTP();
         customer.setCustomerOTP(customerOTP);
@@ -54,8 +54,8 @@ class CustomerServiceTest {
         customer.setCustomerSecurityImages(customerSecurityImages);
         CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
         customer.addCustomerSecurityQuestions(customerSecurityQuestions);
-        Mockito.when(customerRepo.findByUserName(username)).thenReturn(Optional.ofNullable(customer));
-        customerService.deleteCustomer(username);
+        Mockito.when(customerRepo.findByUserName(userName)).thenReturn(Optional.ofNullable(customer));
+        customerService.deleteCustomer(userName);
         Mockito.verify(customerRepo).delete(customer);
     }
 
@@ -63,7 +63,7 @@ class CustomerServiceTest {
     void createSecurityQuestions_withValidSecurityQuestions_shouldCreateCustomerSecurityQuestions(){
         String name = "Uzair";
         UUID id=UUID.randomUUID();
-        SecurityQuestionsDtoList securityQuestionsDtoList=new SecurityQuestionsDtoList();
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
         List<SecurityQuestionsDto> securityQuestionsList=new ArrayList<>();
         SecurityQuestionsDto securityQuestionsDto=new SecurityQuestionsDto();
         SecurityQuestions securityQuestions=new SecurityQuestions();
@@ -71,18 +71,18 @@ class CustomerServiceTest {
 
         securityQuestions.setId(id);
         securityQuestionsDto.setSecurityQuestionId(id.toString());
-        securityQuestionsDto.setSecurityQuestionAnswer("abc");
+        securityQuestionsDto.setSecurityQuestionAnswer("Red");
         securityQuestionsList.add(securityQuestionsDto);
         securityQuestionsList.add(securityQuestionsDto);
         securityQuestionsList.add(securityQuestionsDto);
-        securityQuestionsDtoList.setSecurityQuestions(securityQuestionsList);
+        createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestionsList);
 
         Mockito.when(customerRepo.findByUserName(name)).thenReturn(Optional.of(customer));
         Mockito.when(securityQuestionsService.validateQuestionId(id)).thenReturn(securityQuestions);
-        customerService.createSecurityQuestions(name,securityQuestionsDtoList);
+        customerService.createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
 
-        Mockito.verify(securityQuestionsService).validateSecurityQuestion(securityQuestionsDtoList);
-        Mockito.verify(securityQuestionsService).validateSecurityQuestionSize(securityQuestionsDtoList);
+        Mockito.verify(securityQuestionsService).validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
+        Mockito.verify(securityQuestionsService).validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);
         Mockito.verify(customerSecurityQuestionsService).deleteCustomerQuestion(customer);
         Mockito.verify(customerSecurityQuestionsRepo,Mockito.times(3)).save(Mockito.any());
     }

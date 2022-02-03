@@ -1,8 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
 import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDtoList;
-import com.mob.casestudy.digitalbanking.entity.CustomerSecurityQuestions;
+import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
 import com.mob.casestudy.digitalbanking.exception.CustomerQuestionNotFoundException;
 import com.mob.casestudy.digitalbanking.exception.CustomerQuestionSizeNotValidException;
@@ -40,7 +39,7 @@ class SecurityQuestionsServiceTest {
     @Test
     void validateQuestionId_withValidQuestionId_shouldReturnSecurityQuestion() {
         UUID id = UUID.randomUUID();
-        SecurityQuestions securityQuestions=new SecurityQuestions("abc");
+        SecurityQuestions securityQuestions=new SecurityQuestions("What is your favourite Place?");
         Mockito.when(securityQuestionsRepo.findById(id)).thenReturn(Optional.of(securityQuestions));
         SecurityQuestions securityQuestions1 = securityQuestionsService.validateQuestionId(id);
         Assertions.assertEquals(securityQuestions,securityQuestions1);
@@ -49,27 +48,27 @@ class SecurityQuestionsServiceTest {
     @Test
     void validateSecurityQuestion_withEmptySecurityQuestionList_shouldThrowException() {
         List<SecurityQuestionsDto> securityQuestions=new ArrayList<>();
-        SecurityQuestionsDtoList securityQuestionsDtoList=new SecurityQuestionsDtoList();
-        securityQuestionsDtoList.setSecurityQuestions(securityQuestions);
-        Assertions.assertThrows(ValidationFailedException.class, () -> securityQuestionsService.validateSecurityQuestion(securityQuestionsDtoList));
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
+        createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
+        Assertions.assertThrows(ValidationFailedException.class, () -> securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest));
     }
 
     @Test
     void validateSecurityQuestion_withValidSecurityQuestionList_shouldReturnSecurityQuestion() {
         List<SecurityQuestionsDto> securityQuestions=new ArrayList<>();
         securityQuestions.add(new SecurityQuestionsDto());
-        SecurityQuestionsDtoList securityQuestionsDtoList=new SecurityQuestionsDtoList();
-        securityQuestionsDtoList.setSecurityQuestions(securityQuestions);
-        securityQuestionsService.validateSecurityQuestion(securityQuestionsDtoList);
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
+        createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
+        securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
     }
 
     @Test
     void validateSecurityQuestionSize_withInvalidSize_shouldThrowException() {
         List<SecurityQuestionsDto> securityQuestions=new ArrayList<>();
         securityQuestions.add(new SecurityQuestionsDto());
-        SecurityQuestionsDtoList securityQuestionsDtoList=new SecurityQuestionsDtoList();
-        securityQuestionsDtoList.setSecurityQuestions(securityQuestions);
-        Assertions.assertThrows(CustomerQuestionSizeNotValidException.class, () -> securityQuestionsService.validateSecurityQuestionSize(securityQuestionsDtoList));
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
+        createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
+        Assertions.assertThrows(CustomerQuestionSizeNotValidException.class, () -> securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest));
     }
 
     @Test
@@ -78,8 +77,8 @@ class SecurityQuestionsServiceTest {
         securityQuestions.add(new SecurityQuestionsDto());
         securityQuestions.add(new SecurityQuestionsDto());
         securityQuestions.add(new SecurityQuestionsDto());
-        SecurityQuestionsDtoList securityQuestionsDtoList=new SecurityQuestionsDtoList();
-        securityQuestionsDtoList.setSecurityQuestions(securityQuestions);
-        securityQuestionsService.validateSecurityQuestionSize(securityQuestionsDtoList);
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
+        createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
+        securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);
     }
 }

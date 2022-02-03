@@ -1,6 +1,6 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDtoList;
+import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
 import com.mob.casestudy.digitalbanking.exception.CustomerQuestionNotFoundException;
 import com.mob.casestudy.digitalbanking.exception.CustomerQuestionSizeNotValidException;
@@ -26,14 +26,14 @@ public class SecurityQuestionsService {
         return byId.get();
     }
 
-    public void validateSecurityQuestion(SecurityQuestionsDtoList securityQuestionsDtoList) {
-        if (securityQuestionsDtoList.getSecurityQuestions().isEmpty()) {
+    public void validateSecurityQuestion(CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
+        if (createCustomerSecurityQuestionsRequest.getSecurityQuestions().isEmpty()) {
             throw new ValidationFailedException("Customer security question can't be Empty");
         }
     }
 
-    public void validateSecurityQuestionSize(SecurityQuestionsDtoList securityQuestionsDtoList) {
-        if (securityQuestionsDtoList.getSecurityQuestions().size() != 3) {
+    public void validateSecurityQuestionSize(CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
+        if (createCustomerSecurityQuestionsRequest.getSecurityQuestions().size() != 3) {
             throw new CustomerQuestionSizeNotValidException("3 questions are allowed.");
         }
     }

@@ -55,7 +55,8 @@ public class DigitalbankingApplication implements CommandLineRunner {
         SecurityQuestions questions2 = securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Color?"));
         securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Food?"));
 
-        SecurityImages images = securityImagesRepo.save(new SecurityImages("What is your favourite Logo?", "http://CustomerPhone"));
+        SecurityImages images = securityImagesRepo.save(new SecurityImages("What is your favourite Logo?", "http://CustomerLogo"));
+        securityImagesRepo.save(new SecurityImages("What is your favourite TV show?", "http://CustomerTVshow"));
 
         customerSecurityQuestions.setCustomer(customer);
         customerSecurityQuestions1.setCustomer(customer);

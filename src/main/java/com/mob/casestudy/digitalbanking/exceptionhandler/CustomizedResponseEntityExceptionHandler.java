@@ -20,32 +20,38 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CUS-DELETE-NFD-001", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
     @ExceptionHandler(ValidationFailedException.class)
-    public final ResponseEntity<Object> handleValidationFailedException(ValidationFailedException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleValidationFailedException(ValidationFailedException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-001", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
     @ExceptionHandler(CustomerQuestionNotFoundException.class)
-    public final ResponseEntity<Object> handleCustomerQuestionNotFoundException(CustomerQuestionNotFoundException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleCustomerQuestionNotFoundException(CustomerQuestionNotFoundException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-003", ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomerQuestionSizeNotValidException.class)
-    public final ResponseEntity<Object> handleCustomerQuestionException(CustomerQuestionSizeNotValidException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleCustomerQuestionException(CustomerQuestionSizeNotValidException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-004", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
     @ExceptionHandler(CustomerNotFoundException.class)
-    public final ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException ex, WebRequest request) {
+    public final ResponseEntity<Object> handleCustomerNotFoundException(CustomerNotFoundException ex) {
         ExceptionResponse exceptionResponse = new ExceptionResponse("CSQ-CREATE-FIE-005", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(SecurityImagesNotFoundException.class)
+    public final ResponseEntity<Object> handleSecurityImagesNotFoundException(SecurityImagesNotFoundException ex) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse("SIM-GET-FIE-001", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
