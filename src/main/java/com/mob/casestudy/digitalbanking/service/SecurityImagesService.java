@@ -1,6 +1,5 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityImagesDto;
 import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.exception.SecurityImagesNotFoundException;
@@ -17,11 +16,10 @@ public class SecurityImagesService {
     SecurityImagesRepo securityImagesRepo;
 
     public GetSecurityImagesResponse getSecurityImages() {
-        List<SecurityImages> securityImagesList = securityImagesRepo.findAll();
-        if (securityImagesList.isEmpty()) {
+        List<SecurityImages> securityImages = securityImagesRepo.findAll();
+        if (securityImages.isEmpty()) {
             throw new SecurityImagesNotFoundException("Security images not found...");
         }
-        List<SecurityImagesDto> securityImagesDtoList = securityImagesList.stream().map(SecurityImages::toDto).toList();
-        return new GetSecurityImagesResponse(securityImagesDtoList);
+        return new GetSecurityImagesResponse(securityImages.stream().map(SecurityImages::toDto).toList());
     }
 }

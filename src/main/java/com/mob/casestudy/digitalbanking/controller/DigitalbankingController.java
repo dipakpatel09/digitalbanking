@@ -1,6 +1,5 @@
 package com.mob.casestudy.digitalbanking.controller;
 
-import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
 import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
@@ -35,7 +34,6 @@ public class DigitalbankingController {
 
     @GetMapping("/service-api/v2/securityImages")
     public ResponseEntity<Object> getSecurityImages() {
-        GetSecurityImagesResponse securityImagesResponse = securityImagesService.getSecurityImages();
-        return ResponseEntity.ok().body(securityImagesResponse);
+        return ResponseEntity.ok().body(securityImagesService.getSecurityImages());
     }
 }

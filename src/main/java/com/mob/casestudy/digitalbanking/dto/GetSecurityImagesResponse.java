@@ -16,8 +16,4 @@ public class GetSecurityImagesResponse {
     public List<SecurityImagesDto> getSecurityImages() {
         return securityImages;
     }
-
-    public void setSecurityImages(List<SecurityImagesDto> securityImages) {
-        this.securityImages = securityImages;
-    }
 }
