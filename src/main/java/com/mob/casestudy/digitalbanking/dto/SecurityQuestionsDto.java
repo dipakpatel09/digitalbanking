@@ -56,6 +56,6 @@ public class SecurityQuestionsDto {
 
     public CustomerSecurityQuestions toEntity() {
 
-        return new CustomerSecurityQuestions(new CustomerSecQuestion(),getSecurityQuestionAnswer());
+        return new CustomerSecurityQuestions(new CustomerSecQuestion(), getSecurityQuestionAnswer());
     }
 }

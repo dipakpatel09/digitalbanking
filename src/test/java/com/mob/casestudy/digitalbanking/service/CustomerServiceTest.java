@@ -45,12 +45,12 @@ class CustomerServiceTest {
     }
 
     @Test
-    void deleteCustomer_withValidCustomer_shouldDeleteExistingCustomer(){
-        String userName="Naitik";
+    void deleteCustomer_withValidCustomer_shouldDeleteExistingCustomer() {
+        String userName = "Naitik";
         Customer customer = new Customer();
-        CustomerOTP customerOTP=new CustomerOTP();
+        CustomerOTP customerOTP = new CustomerOTP();
         customer.setCustomerOTP(customerOTP);
-        CustomerSecurityImages customerSecurityImages =new CustomerSecurityImages();
+        CustomerSecurityImages customerSecurityImages = new CustomerSecurityImages();
         customer.setCustomerSecurityImages(customerSecurityImages);
         CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
         customer.addCustomerSecurityQuestions(customerSecurityQuestions);
@@ -60,14 +60,14 @@ class CustomerServiceTest {
     }
 
     @Test
-    void createSecurityQuestions_withValidSecurityQuestions_shouldCreateCustomerSecurityQuestions(){
+    void createSecurityQuestions_withValidSecurityQuestions_shouldCreateCustomerSecurityQuestions() {
         String name = "Uzair";
-        UUID id=UUID.randomUUID();
-        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest =new CreateCustomerSecurityQuestionsRequest();
-        List<SecurityQuestionsDto> securityQuestionsList=new ArrayList<>();
-        SecurityQuestionsDto securityQuestionsDto=new SecurityQuestionsDto();
-        SecurityQuestions securityQuestions=new SecurityQuestions();
-        Customer customer=new Customer();
+        UUID id = UUID.randomUUID();
+        CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
+        List<SecurityQuestionsDto> securityQuestionsList = new ArrayList<>();
+        SecurityQuestionsDto securityQuestionsDto = new SecurityQuestionsDto();
+        SecurityQuestions securityQuestions = new SecurityQuestions();
+        Customer customer = new Customer();
 
         securityQuestions.setId(id);
         securityQuestionsDto.setSecurityQuestionId(id.toString());
@@ -84,7 +84,7 @@ class CustomerServiceTest {
         Mockito.verify(securityQuestionsService).validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
         Mockito.verify(securityQuestionsService).validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);
         Mockito.verify(customerSecurityQuestionsService).deleteCustomerQuestion(customer);
-        Mockito.verify(customerSecurityQuestionsRepo,Mockito.times(3)).save(Mockito.any());
+        Mockito.verify(customerSecurityQuestionsRepo, Mockito.times(3)).save(Mockito.any());
     }
 }
 

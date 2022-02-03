@@ -32,11 +32,11 @@ class SecurityImagesServiceTest {
 
     @Test
     void getSecurityImages_withValidSecurityImagesList_shouldReturnSecurityImagesList() {
-        List<SecurityImages> securityImagesList=new ArrayList<>();
-        SecurityImages securityImages=new SecurityImages("What is your favourite TV show?","http://CustomerTVshow");
+        List<SecurityImages> securityImagesList = new ArrayList<>();
+        SecurityImages securityImages = new SecurityImages("What is your favourite TV show?", "http://CustomerTVshow");
         securityImagesList.add(securityImages);
-        List<SecurityImagesDto> securityImagesDtoList=List.of(securityImages.toDto());
-        GetSecurityImagesResponse expected=new GetSecurityImagesResponse(securityImagesDtoList);
+        List<SecurityImagesDto> securityImagesDtoList = List.of(securityImages.toDto());
+        GetSecurityImagesResponse expected = new GetSecurityImagesResponse(securityImagesDtoList);
         Mockito.when(securityImagesRepo.findAll()).thenReturn(securityImagesList);
         GetSecurityImagesResponse actual = securityImagesService.getSecurityImages();
         org.assertj.core.api.Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

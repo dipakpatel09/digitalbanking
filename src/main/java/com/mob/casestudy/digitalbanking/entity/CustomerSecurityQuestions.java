@@ -42,8 +42,8 @@ public class CustomerSecurityQuestions {
     }
 
     public CustomerSecurityQuestions(CustomerSecQuestion customerSecQuestion, String securityQuestionAnswer) {
-        this.customerSecQuestion=customerSecQuestion;
-        this.securityQuestionAnswer=securityQuestionAnswer;
+        this.customerSecQuestion = customerSecQuestion;
+        this.securityQuestionAnswer = securityQuestionAnswer;
     }
 
     public CustomerSecQuestion getCustomerSecQuestion() {

@@ -2,8 +2,6 @@ package com.mob.casestudy.digitalbanking.controller;
 
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
-import com.mob.casestudy.digitalbanking.dto.SecurityImagesDto;
-import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
 import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
 import org.junit.jupiter.api.Assertions;
@@ -15,10 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class DigitalbankingControllerTest {

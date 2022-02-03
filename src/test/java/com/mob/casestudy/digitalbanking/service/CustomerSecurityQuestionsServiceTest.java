@@ -23,14 +23,14 @@ class CustomerSecurityQuestionsServiceTest {
 
     @Test
     void deleteCustomerQuestion_withEmptyCustomerQuestion_shouldThrowException() {
-        Customer customer=new Customer();
+        Customer customer = new Customer();
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
-        Mockito.verify(customerSecurityQuestionsRepo,Mockito.times(0)).deleteAll();
+        Mockito.verify(customerSecurityQuestionsRepo, Mockito.times(0)).deleteAll();
     }
 
     @Test
     void deleteCustomerQuestion_withValidCustomerQuestion_shouldDeleteExistingCustomerQuestion() {
-        Customer customer=new Customer();
+        Customer customer = new Customer();
         customer.addCustomerSecurityQuestions(new CustomerSecurityQuestions("Ahmedabad", LocalDateTime.now()));
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
         Mockito.verify(customerSecurityQuestionsRepo).deleteAll();
