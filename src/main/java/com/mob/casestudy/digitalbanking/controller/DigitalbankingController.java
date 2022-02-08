@@ -1,6 +1,8 @@
 package com.mob.casestudy.digitalbanking.controller;
 
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
+import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
 import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class DigitalbankingController {
     @Autowired
     SecurityImagesService securityImagesService;
 
+    @Autowired
+    CustomerSecurityImagesService customerSecurityImagesService;
+
     @DeleteMapping("/client-api/v1/customers/{userName}")
     public ResponseEntity<Object> deleteCustomerByUserName(@PathVariable String userName) {
         customerService.deleteCustomer(userName);
@@ -35,5 +40,11 @@ public class DigitalbankingController {
     @GetMapping("/service-api/v2/securityImages")
     public ResponseEntity<Object> getSecurityImages() {
         return ResponseEntity.ok().body(securityImagesService.getSecurityImages());
+    }
+
+    @GetMapping("/client-api/v1/customers/{userName}/securityImages")
+    public ResponseEntity<Object> getSecurityImageByUserName(@PathVariable String userName) {
+        CustomerSecurityImagesDto customerSecurityImagesDto = customerSecurityImagesService.getSecurityImageByUserName(userName);
+        return ResponseEntity.ok().body(customerSecurityImagesDto);
     }
 }

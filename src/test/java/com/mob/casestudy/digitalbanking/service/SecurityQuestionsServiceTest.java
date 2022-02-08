@@ -3,9 +3,8 @@ package com.mob.casestudy.digitalbanking.service;
 import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
-import com.mob.casestudy.digitalbanking.exception.CustomerQuestionNotFoundException;
-import com.mob.casestudy.digitalbanking.exception.CustomerQuestionSizeNotValidException;
-import com.mob.casestudy.digitalbanking.exception.ValidationFailedException;
+import com.mob.casestudy.digitalbanking.exception.CustomBadRequestException;
+import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.SecurityQuestionsRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class SecurityQuestionsServiceTest {
     void validateQuestionId_withInvalidQuestionId_shouldThrowException() {
         UUID id = UUID.randomUUID();
         Mockito.when(securityQuestionsRepo.findById(id)).thenReturn(Optional.empty());
-        Assertions.assertThrows(CustomerQuestionNotFoundException.class, () -> securityQuestionsService.validateQuestionId(id));
+        Assertions.assertThrows(CustomNotFoundException.class, () -> securityQuestionsService.validateQuestionId(id));
     }
 
     @Test
@@ -50,7 +49,7 @@ class SecurityQuestionsServiceTest {
         List<SecurityQuestionsDto> securityQuestions = new ArrayList<>();
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
-        Assertions.assertThrows(ValidationFailedException.class, () -> securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest));
+        Assertions.assertThrows(CustomBadRequestException.class, () -> securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest));
     }
 
     @Test
@@ -68,7 +67,7 @@ class SecurityQuestionsServiceTest {
         securityQuestions.add(new SecurityQuestionsDto());
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
-        Assertions.assertThrows(CustomerQuestionSizeNotValidException.class, () -> securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest));
+        Assertions.assertThrows(CustomBadRequestException.class, () -> securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest));
     }
 
     @Test

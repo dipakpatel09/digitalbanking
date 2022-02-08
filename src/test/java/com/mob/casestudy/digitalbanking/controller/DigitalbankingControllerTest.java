@@ -1,7 +1,9 @@
 package com.mob.casestudy.digitalbanking.controller;
 
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
 import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
+import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
 import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
 import org.junit.jupiter.api.Assertions;
@@ -26,10 +28,13 @@ class DigitalbankingControllerTest {
     @Mock
     SecurityImagesService securityImagesService;
 
+    @Mock
+    CustomerSecurityImagesService customerSecurityImagesService;
+
     @Test
     void deleteCustomerByUserName() {
         ResponseEntity<Object> expected = ResponseEntity.noContent().build();
-        String name = "Neel";
+        String name = "Dipak";
         ResponseEntity<Object> actual = digitalbankingController.deleteCustomerByUserName(name);
         Mockito.verify(customerService).deleteCustomer(name);
         Assertions.assertEquals(expected, actual);
@@ -37,7 +42,7 @@ class DigitalbankingControllerTest {
 
     @Test
     void createSecurityQuestionsByUserName() {
-        String name = "Uzair";
+        String name = "Dipak";
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         ResponseEntity<Object> expected = ResponseEntity.status(HttpStatus.CREATED).build();
         ResponseEntity<Object> actual = digitalbankingController.createSecurityQuestionsByUserName(name, createCustomerSecurityQuestionsRequest);
@@ -51,7 +56,16 @@ class DigitalbankingControllerTest {
         Mockito.when(securityImagesService.getSecurityImages()).thenReturn(securityImagesResponse);
         ResponseEntity<Object> expected = ResponseEntity.ok().body(securityImagesResponse);
         ResponseEntity<Object> actual = digitalbankingController.getSecurityImages();
-        Mockito.verify(securityImagesService).getSecurityImages();
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getSecurityImageByUserName() {
+        String name = "Dipak";
+        CustomerSecurityImagesDto customerSecurityImagesDto = new CustomerSecurityImagesDto();
+        Mockito.when(customerSecurityImagesService.getSecurityImageByUserName(name)).thenReturn(customerSecurityImagesDto);
+        ResponseEntity<Object> expected = ResponseEntity.ok().body(customerSecurityImagesDto);
+        ResponseEntity<Object> actual = digitalbankingController.getSecurityImageByUserName(name);
         Assertions.assertEquals(expected, actual);
     }
 }

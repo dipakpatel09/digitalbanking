@@ -1,10 +1,10 @@
 package com.mob.casestudy.digitalbanking.service;
 
+import com.mob.casestudy.digitalbanking.errorlist.CustomError;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
-import com.mob.casestudy.digitalbanking.exception.CustomerQuestionNotFoundException;
-import com.mob.casestudy.digitalbanking.exception.CustomerQuestionSizeNotValidException;
-import com.mob.casestudy.digitalbanking.exception.ValidationFailedException;
+import com.mob.casestudy.digitalbanking.exception.CustomBadRequestException;
+import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.SecurityQuestionsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,20 +21,20 @@ public class SecurityQuestionsService {
     public SecurityQuestions validateQuestionId(UUID id) {
         Optional<SecurityQuestions> byId = securityQuestionsRepo.findById(id);
         if (byId.isEmpty()) {
-            throw new CustomerQuestionNotFoundException("Customer question not found..");
+            throw new CustomNotFoundException(CustomError.CUS_SEC_QUES_NOT_FOUND, "Customer question not found..");
         }
         return byId.get();
     }
 
     public void validateSecurityQuestion(CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
         if (createCustomerSecurityQuestionsRequest.getSecurityQuestions().isEmpty()) {
-            throw new ValidationFailedException("Customer security question can't be Empty");
+            throw new CustomBadRequestException(CustomError.CUS_SEC_QUES_CREATE_FIELD_ERROR, "Customer security question can't be Empty");
         }
     }
 
     public void validateSecurityQuestionSize(CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
         if (createCustomerSecurityQuestionsRequest.getSecurityQuestions().size() != 3) {
-            throw new CustomerQuestionSizeNotValidException("3 questions are allowed.");
+            throw new CustomBadRequestException(CustomError.CUS_SEC_QUES_CREATE_3_QUES_ERROR, "3 questions are allowed.");
         }
     }
 }

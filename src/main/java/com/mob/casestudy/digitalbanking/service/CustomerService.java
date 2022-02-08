@@ -1,11 +1,11 @@
 package com.mob.casestudy.digitalbanking.service;
 
+import com.mob.casestudy.digitalbanking.errorlist.CustomError;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.mob.casestudy.digitalbanking.exception.*;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
-import com.mob.casestudy.digitalbanking.exception.CustomerNotFoundException;
-import com.mob.casestudy.digitalbanking.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +31,12 @@ public class CustomerService {
 
     @Transactional
     public void deleteCustomer(String userName) {
-        Customer customer = findCustomerByUserName(userName);
+        Customer customer = findCustomerByUserName(userName, CustomError.CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
         customerRepo.delete(customer);
     }
 
-    private Customer findCustomerByUserName(String userName) {
-        return customerRepo.findByUserName(userName).orElseThrow(() -> new UserNotFoundException("Invalid User.." + userName));
+    public Customer findCustomerByUserName(String userName, String errorCode, String errorDescription) {
+        return customerRepo.findByUserName(userName).orElseThrow(() -> new CustomNotFoundException(errorCode, errorDescription));
     }
 
     @Transactional
@@ -51,20 +51,24 @@ public class CustomerService {
     private Customer validateCustomer(String userName) {
         Optional<Customer> byUserName = customerRepo.findByUserName(userName);
         if (byUserName.isEmpty()) {
-            throw new CustomerNotFoundException("The requested user not found.." + userName);
+            throw new CustomNotFoundException(CustomError.CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + userName);
         }
         return byUserName.get();
     }
 
     private void addCustomerQuestion(Customer customer, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
         for (int i = 0; i < 3; i++) {
+            String ansLength = createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionAnswer().trim();
+            if (ansLength.length() < 3) {
+                throw new CustomBadRequestException(CustomError.CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer should be minimum 3 Characters");
+            }
             CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
             customer.addCustomerSecurityQuestions(customerSecurityQuestions);
             customerSecurityQuestions.setCustomer(customer);
             SecurityQuestions securityQuestions = securityQuestionsService.validateQuestionId(UUID.fromString(createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionId()));
             customerSecurityQuestions.setSecurityQuestions(securityQuestions);
             customerSecurityQuestions.setCreatedOn(LocalDateTime.now());
-            customerSecurityQuestions.setSecurityQuestionAnswer(createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionAnswer().trim());
+            customerSecurityQuestions.setSecurityQuestionAnswer(ansLength);
             customerSecurityQuestionsRepo.save(customerSecurityQuestions);
         }
     }

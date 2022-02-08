@@ -1,6 +1,5 @@
 package com.mob.casestudy.digitalbanking.entity;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
 import com.mob.casestudy.digitalbanking.embedded.CustomerSecQuestion;
 
 import javax.persistence.*;
@@ -85,10 +84,4 @@ public class CustomerSecurityQuestions {
     public void setSecurityQuestions(SecurityQuestions securityQuestions) {
         this.securityQuestions = securityQuestions;
     }
-
-    public SecurityQuestionsDto toDto() {
-
-        return new SecurityQuestionsDto(securityQuestions.getId().toString(), securityQuestions.getSecurityQuestionText(), securityQuestionAnswer);
-    }
-
 }

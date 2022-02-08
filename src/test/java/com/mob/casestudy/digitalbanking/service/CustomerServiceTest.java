@@ -2,9 +2,10 @@ package com.mob.casestudy.digitalbanking.service;
 
 import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.mob.casestudy.digitalbanking.errorlist.CustomError;
+import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
-import com.mob.casestudy.digitalbanking.exception.UserNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -38,30 +39,33 @@ class CustomerServiceTest {
     CustomerSecurityQuestionsRepo customerSecurityQuestionsRepo;
 
     @Test
-    void deleteCustomer_withNullCustomer_shouldThrowException() {
-        String name = "Uzair";
-        Mockito.when(customerRepo.findByUserName(name)).thenReturn(Optional.ofNullable(null));
-        Assertions.assertThrows(UserNotFoundException.class, () -> customerService.deleteCustomer(name));
-    }
-
-    @Test
-    void deleteCustomer_withValidCustomer_shouldDeleteExistingCustomer() {
-        String userName = "Naitik";
+    void deleteCustomer_withValidCustomer_shouldDeleteCustomer() {
+        String name = "Dipak";
         Customer customer = new Customer();
-        CustomerOTP customerOTP = new CustomerOTP();
-        customer.setCustomerOTP(customerOTP);
-        CustomerSecurityImages customerSecurityImages = new CustomerSecurityImages();
-        customer.setCustomerSecurityImages(customerSecurityImages);
-        CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
-        customer.addCustomerSecurityQuestions(customerSecurityQuestions);
-        Mockito.when(customerRepo.findByUserName(userName)).thenReturn(Optional.ofNullable(customer));
-        customerService.deleteCustomer(userName);
+        Mockito.when(customerRepo.findByUserName(name)).thenReturn(Optional.of(customer));
+        customerService.deleteCustomer(name);
         Mockito.verify(customerRepo).delete(customer);
     }
 
     @Test
+    void findCustomerByUserName_withEmptyCustomer_shouldThrowException() {
+        String name = "Dipak";
+        Mockito.when(customerRepo.findByUserName(name)).thenReturn(Optional.empty());
+        Assertions.assertThrows(CustomNotFoundException.class, () -> customerService.deleteCustomer(name));
+    }
+
+    @Test
+    void findCustomerByUserName_withValidCustomer_shouldReturnCustomer() {
+        String userName = "Dipak";
+        Customer customer = new Customer();
+        Mockito.when(customerRepo.findByUserName(userName)).thenReturn(Optional.of(customer));
+        customerService.findCustomerByUserName(userName, CustomError.CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
+        Mockito.verify(customerRepo).findByUserName(userName);
+    }
+
+    @Test
     void createSecurityQuestions_withValidSecurityQuestions_shouldCreateCustomerSecurityQuestions() {
-        String name = "Uzair";
+        String name = "Dipak";
         UUID id = UUID.randomUUID();
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         List<SecurityQuestionsDto> securityQuestionsList = new ArrayList<>();

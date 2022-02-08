@@ -3,7 +3,7 @@ package com.mob.casestudy.digitalbanking.service;
 import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
 import com.mob.casestudy.digitalbanking.dto.SecurityImagesDto;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
-import com.mob.casestudy.digitalbanking.exception.SecurityImagesNotFoundException;
+import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.SecurityImagesRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class SecurityImagesServiceTest {
     @Test
     void getSecurityImages_withEmptySecurityImagesList_shouldThrowException() {
         Mockito.when(securityImagesRepo.findAll()).thenReturn(Collections.emptyList());
-        Assertions.assertThrows(SecurityImagesNotFoundException.class, () -> securityImagesService.getSecurityImages());
+        Assertions.assertThrows(CustomNotFoundException.class, () -> securityImagesService.getSecurityImages());
     }
 
     @Test

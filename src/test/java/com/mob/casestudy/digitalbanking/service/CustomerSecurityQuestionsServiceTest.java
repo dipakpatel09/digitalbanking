@@ -22,7 +22,7 @@ class CustomerSecurityQuestionsServiceTest {
     CustomerSecurityQuestionsService customerSecurityQuestionsService;
 
     @Test
-    void deleteCustomerQuestion_withEmptyCustomerQuestion_shouldThrowException() {
+    void deleteCustomerQuestion_withEmptyCustomerQuestion_shouldNotDeleteAnything() {
         Customer customer = new Customer();
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
         Mockito.verify(customerSecurityQuestionsRepo, Mockito.times(0)).deleteAll();
