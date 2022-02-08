@@ -1,6 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityImages;
@@ -16,7 +17,7 @@ public class CustomerSecurityImagesService {
     CustomerService customerService;
 
     public CustomerSecurityImagesDto getSecurityImageByUserName(String userName) {
-        Customer byUserName = customerService.findCustomerByUserName(userName, CustomError.CUS_SEC_IMG_CUS_NOT_FOUND, "User " + userName + " not found");
+        Customer byUserName = customerService.findCustomerByUserName(userName, CUS_SEC_IMG_CUS_NOT_FOUND, "User " + userName + " not found");
         CustomerSecurityImages customerSecurityImages = byUserName.getCustomerSecurityImages();
         checkCustomerSecurityImage(customerSecurityImages);
         SecurityImages securityImages = customerSecurityImages.getSecurityImages();
@@ -25,7 +26,7 @@ public class CustomerSecurityImagesService {
 
     private void checkCustomerSecurityImage(CustomerSecurityImages customerSecurityImages) {
         if (customerSecurityImages == null) {
-            throw new CustomNotFoundException(CustomError.CUS_SEC_IMG_NOT_FOUND, "Images not found");
+            throw new CustomNotFoundException(CUS_SEC_IMG_NOT_FOUND, "Images not found");
         }
     }
 }

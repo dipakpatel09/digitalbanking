@@ -1,6 +1,7 @@
 package com.mob.casestudy.digitalbanking.exceptionhandler;
 
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(CustomError.CUS_SEC_QUES_VALIDATE_ERROR, Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage());
+        ExceptionResponse exceptionResponse = new ExceptionResponse(CUS_SEC_QUES_VALIDATE_ERROR, Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,10 +1,11 @@
 package com.mob.casestudy.digitalbanking.service;
 
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityImages;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ class CustomerSecurityImagesServiceTest {
         customerSecurityImages.setSecurityImageCaption("Apple");
         customer.setCustomerSecurityImages(customerSecurityImages);
         CustomerSecurityImagesDto expected = customerSecurityImages.toDto(securityImages);
-        Mockito.when(customerService.findCustomerByUserName(name, CustomError.CUS_SEC_IMG_CUS_NOT_FOUND, "User " + name + " not found")).thenReturn(customer);
+        Mockito.when(customerService.findCustomerByUserName(name, CUS_SEC_IMG_CUS_NOT_FOUND, "User " + name + " not found")).thenReturn(customer);
         CustomerSecurityImagesDto actual = customerSecurityImagesService.getSecurityImageByUserName(name);
         org.assertj.core.api.Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }

@@ -1,8 +1,9 @@
 package com.mob.casestudy.digitalbanking.service;
 
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
@@ -59,7 +60,7 @@ class CustomerServiceTest {
         String userName = "Dipak";
         Customer customer = new Customer();
         Mockito.when(customerRepo.findByUserName(userName)).thenReturn(Optional.of(customer));
-        customerService.findCustomerByUserName(userName, CustomError.CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
+        customerService.findCustomerByUserName(userName, CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
         Mockito.verify(customerRepo).findByUserName(userName);
     }
 

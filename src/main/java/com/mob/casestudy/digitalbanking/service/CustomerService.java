@@ -1,6 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.exception.*;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
@@ -31,7 +32,7 @@ public class CustomerService {
 
     @Transactional
     public void deleteCustomer(String userName) {
-        Customer customer = findCustomerByUserName(userName, CustomError.CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
+        Customer customer = findCustomerByUserName(userName, CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
         customerRepo.delete(customer);
     }
 
@@ -51,7 +52,7 @@ public class CustomerService {
     private Customer validateCustomer(String userName) {
         Optional<Customer> byUserName = customerRepo.findByUserName(userName);
         if (byUserName.isEmpty()) {
-            throw new CustomNotFoundException(CustomError.CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + userName);
+            throw new CustomNotFoundException(CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + userName);
         }
         return byUserName.get();
     }
@@ -60,7 +61,7 @@ public class CustomerService {
         for (int i = 0; i < 3; i++) {
             String ansLength = createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionAnswer().trim();
             if (ansLength.length() < 3) {
-                throw new CustomBadRequestException(CustomError.CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer should be minimum 3 Characters");
+                throw new CustomBadRequestException(CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer should be minimum 3 Characters");
             }
             CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
             customer.addCustomerSecurityQuestions(customerSecurityQuestions);

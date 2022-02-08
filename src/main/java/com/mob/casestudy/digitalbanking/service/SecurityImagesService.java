@@ -1,6 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.errorlist.CustomError;
+import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+
 import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
@@ -19,7 +20,7 @@ public class SecurityImagesService {
     public GetSecurityImagesResponse getSecurityImages() {
         List<SecurityImages> securityImages = securityImagesRepo.findAll();
         if (securityImages.isEmpty()) {
-            throw new CustomNotFoundException(CustomError.SEC_IMG_NOT_FOUND, "Security images not found...");
+            throw new CustomNotFoundException(SEC_IMG_NOT_FOUND, "Security images not found...");
         }
         return new GetSecurityImagesResponse(securityImages.stream().map(SecurityImages::toDto).toList());
     }
