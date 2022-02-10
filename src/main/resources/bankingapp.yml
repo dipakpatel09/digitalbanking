@@ -1,0 +1,572 @@
+openapi: 3.0.3
+info:
+  title: Customer API Specification
+  description: Customer API Specification (Digital Banking)
+  version: v1
+servers:
+  - url: http://localhost:8080/customer-service/
+    description: The server
+tags:
+  - name: Customer
+paths:
+  /client-api/v1/customers:
+    post:
+      tags:
+        - Customer
+      summary: Create a Customer.
+      description: Create Customer For Digital Banking Application.
+      operationId: postCustomers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerRequest'
+      responses:
+        "201":
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCustomerResponse'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+    get:
+      tags:
+        - Customer
+      summary: Get a Customer based on requested parameters
+      description: Returns a customer  matching one of the provided id's. One of these is mandatory.
+      operationId: getCustomers
+      parameters:
+        - name: id
+          in: query
+          description: System generated user id
+          required: false
+          schema:
+            type: string
+        - name: user_name
+          in: query
+          description: The online user name defined by the user.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Customer Object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerResponse'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+        "400":
+          $ref: '#/components/schemas/BadRequestException'
+  /client-api/v1/customers/{username}:
+    patch:
+      tags:
+        - Customer
+      summary: Updates a customer by user name
+      description: Updates a customer by username
+      operationId: patchCustomerByUserName
+      parameters:
+        - name: username
+          in: path
+          description: User Name of the User
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchCustomerRequest'
+      responses:
+        "204":
+          description: No content
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+    delete:
+      tags:
+        - Customer
+      summary: Delete a customer by user name
+      description: Delete Customer and respective child records of Customer
+      operationId: deleteCustomerByUserName
+      parameters:
+        - name: username
+          in: path
+          description: User Name of the User
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+  /client-api/v1/customers/{username}/securityQuestions:
+    put:
+      tags:
+        - Security Questions
+      summary: Create Security Questions for Customer
+      description: Create Security Questions for Customer
+      operationId: createSecurityQuestionsByUserName
+      parameters:
+        - name: username
+          in: path
+          description: User Name of User
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Creates Customer Security Questions Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerSecurityQuestionsRequest'
+      responses:
+        "201":
+          description: Security Questions Created(No Content)
+        "400":
+          $ref: '#/components/schemas/BadRequestException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+    get:
+      tags:
+        - Security Questions
+      summary: get Security Questions for Customer
+      description: Get Security Questions for Customer
+      operationId: getSecurityQuestionsByUserName
+      parameters:
+        - name: username
+          in: path
+          description: User Name of User
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerSecurityQuestionResponse'
+        "400":
+          $ref: '#/components/schemas/BadRequestException'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+  /client-api/v1/securityQuestions:
+    get:
+      tags:
+        - Security Questions
+      summary: Retrieve Security Questions
+      description: Get all the list of security questions for display
+      operationId: getSecurityQuestions
+      responses:
+        "200":
+          description: List of Security Questions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSecurityQuestionsResponse'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+  /client-api/v1/customers/{username}/securityImages:
+    get:
+      tags:
+        - Security Image
+      summary: Get Security Images by username
+      description: Get Security Images by username
+      operationId: getSecurityImageByUserName
+      parameters:
+        - name: username
+          in: path
+          description: User Name of User
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCustomerSecurityImageResponse'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+    put:
+      tags:
+        - Security Image
+      summary: Save Security Images by id
+      description: Create/Update security image by customer id.
+      operationId: saveSecurityImageById
+      parameters:
+        - name: username
+          in: path
+          description: User Name of User
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerSecurityImageRequest'
+      responses:
+        "201":
+          description: Customer created
+        "400":
+          $ref: '#/components/schemas/BadRequestException'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+  /service-api/v2/securityImages:
+    get:
+      tags:
+        - Security Image
+      summary: Retrieve Security Images
+      description: Get all the list of security images for display
+      operationId: getSecurityImages
+      responses:
+        "200":
+          description: List of Security Images
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSecurityImagesResponse'
+        "500":
+          $ref: '#/components/schemas/InternalServerException'
+        "404":
+          $ref: '#/components/schemas/NotFoundException'
+  /client-api/v1/otp/initiate:
+    post:
+      tags:
+        - OTP
+      operationId: initiateOtp
+      description: service to initiate an OTP for Customer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateOtpRequest'
+      responses:
+        200:
+          description: Success
+        400:
+          $ref: '#/components/schemas/BadRequestException'
+        404:
+          $ref: '#/components/schemas/NotFoundException'
+        500:
+          $ref: '#/components/schemas/InternalServerException'
+  /service-api/v2/otp/validate:
+    post:
+      tags:
+        - OTP
+      operationId: validateOtp
+      description: service to validate an OTP for Customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateOtpRequest'
+      responses:
+        200:
+          description: Success
+        400:
+          $ref: '#/components/schemas/BadRequestException'
+        404:
+          $ref: '#/components/schemas/NotFoundException'
+        500:
+          $ref: '#/components/schemas/InternalServerException'
+components:
+  schemas:
+    BadRequestException:
+      type: object
+      description: Generic exception representating the bad request
+      x-java-type: com.mobiquity.v1.exceptions.BadRequestException
+    NotFoundException:
+      type: object
+      description: Generic Exception representating data not found exception
+      x-java-type: com.mobiquity.v1.exceptions.BadRequestException
+    InternalServerException:
+      type: object
+      description: Generic exception representating internal server error
+      x-java-type: com.mobiquity.v1.exceptions.BadRequestException
+    Id:
+      type: string
+      description: The System Generated User Id of the Customer
+      maxLength: 36
+      example: "4gg45-fsdf45-fsdfj56-5454"
+    UserName:
+      type: string
+      description: The online user name.
+      minLength: 1
+      maxLength: 30
+      example: "JohnSmith1"
+    FirstName:
+      type: string
+      description: First Name of the User used for the profile screen
+      maxLength: 50
+      example: "John"
+    LastName:
+      type: string
+      description: Last Name of the User used for the profile screen
+      maxLength: 50
+      example: "Smith"
+    PhoneNumber:
+      type: string
+      description: Primary Mobile number of the User
+      maxLength: 50
+      example: "965456797"
+    Email:
+      type: string
+      description: Primary Email address of the User
+      maxLength: 50
+      example: "john.smith@mobiquityinc.com"
+    PreferredLanguage:
+      type: string
+      description: Preferred Language of the User as per ISO 639.2
+      enum: [ EN, FR, DE ]
+      example: EN
+    CreatedOn:
+      type: string
+      description: The creation date of the object
+      format: date-time
+      example: "2018-11-13T20:20:39+00:00"
+    UpdatedOn:
+      type: string
+      description: The modification date of the object
+      format: date-time
+      example: "2018-11-13T20:20:39+00:00"
+    ExternalId:
+      type: string
+      description: External User Id
+      maxLength: 50
+      example: "JohnSmith1_ext"
+    Status:
+      type: string
+      description: The status of the customer
+      enum:
+        - ACTIVE
+        - PENDING
+        - INACTIVE
+      example: "ACTIVE"
+    SecurityQuestionId:
+      type: string
+      description: Security Question Correlation Id
+      maxLength: 36
+      example: "00a8717c-b54b-4233-bc13-0cc905c54032"
+    SecurityQuestionAnswer:
+      type: string
+      description: Answer of the Security Question(SHA-256 HASH)
+      maxLength: 100
+      example: "Black"
+    SecurityQuestionText:
+      type: string
+      description: Security Question Text
+      maxLength: 100
+      example: "What is your favourite Color?"
+    SecurityImageName:
+      type: string
+      description: Name of Security Image selected by Customer
+      maxLength: 36
+      example: "Car"
+    SecurityImageCaption:
+      type: string
+      description: Caption selected  by Customer
+      maxLength: 50
+      example: "Tesla"
+    SecurityImageId:
+      type: string
+      description: Caption selected  by Customer
+      maxLength: 50
+      example: "00a8717c-b54b-4233-bc13-0cc905c54032"
+    SecurityImageUrl:
+      type: string
+      description: URL to retrieve security image
+      maxLength: 255
+      example: "https%3A%2F%2Fwww.thebalancecareers.com%2Fthmb%2FBJkAIzHRPYluMoIJHVAP96INk7Y%3D%2F1885x1414%2Fsmart%2Ffilters%3Ano_upscale()%2FGettyImages-185002046-5772f4153df78cb62ce1ad69.jpg&imgrefurl=https%3A%2F%2Fwww.thebalancecareers.com%2Fbusiness-thank-you-letter-examples-2059676&tbnid=gxxV8TY2fCmd8M&vet=12ahUKEwi2qYPP2Kf1AhXnK7cAHZmMB9EQMygAegUIARDUAQ..i&docid=YIUj3D91bX4QUM&w=1885&h=1414&itg=1&q=thank%20you&ved=2ahUKEwi2qYPP2Kf1AhXnK7cAHZmMB9EQMygAegUIARDUAQ"
+    TemplateId:
+      type: string
+      description: Template Id to retrieve OTP
+      maxLength: 255
+      example: "REGISTRATION"
+    OTP:
+      type: string
+      description: OTP Generated for Customer
+      maxLength: 6
+      example: "234354"
+    GetCustomerResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        userName:
+          $ref: '#/components/schemas/UserName'
+        firstName:
+          $ref: '#/components/schemas/FirstName'
+        lastName:
+          $ref: '#/components/schemas/LastName'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+        status:
+          $ref: '#/components/schemas/Status'
+        preferredLanguage:
+          $ref: '#/components/schemas/PreferredLanguage'
+        externalId:
+          $ref: '#/components/schemas/ExternalId'
+        createdOn:
+          $ref: '#/components/schemas/CreatedOn'
+        updatedOn:
+          $ref: '#/components/schemas/UpdatedOn'
+    CreateCustomerRequest:
+      required:
+        - userName
+        - firstName
+        - lastName
+        - phoneNumber
+      type: object
+      properties:
+        userName:
+          $ref: '#/components/schemas/UserName'
+        firstName:
+          $ref: '#/components/schemas/FirstName'
+        lastName:
+          $ref: '#/components/schemas/LastName'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+        preferredLanguage:
+          $ref: '#/components/schemas/PreferredLanguage'
+    CreateCustomerResponse:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+    PatchCustomerRequest:
+      type: object
+      properties:
+        firstName:
+          $ref: '#/components/schemas/FirstName'
+        lastName:
+          $ref: '#/components/schemas/LastName'
+        phoneNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+        preferredLanguage:
+          $ref: '#/components/schemas/PreferredLanguage'
+        status:
+          $ref: '#/components/schemas/Status'
+    SecurityQuestion:
+      type: object
+      properties:
+        securityQuestionId:
+          $ref: '#/components/schemas/SecurityQuestionId'
+        securityQuestionText:
+          $ref: '#/components/schemas/SecurityQuestionText'
+        securityQuestionAnswer:
+          $ref: '#/components/schemas/SecurityQuestionAnswer'
+    SecurityQuestions:
+      type: array
+      items:
+        $ref: '#/components/schemas/SecurityQuestion'
+    CreateCustomerSecurityQuestionsRequest:
+      type: object
+      properties:
+        securityQuestions:
+          $ref: '#/components/schemas/SecurityQuestions'
+    GetCustomerSecurityQuestionResponse:
+      type: object
+      properties:
+        securityQuestions:
+          $ref: '#/components/schemas/SecurityQuestions'
+    GetCustomerSecurityImageResponse:
+      type: object
+      properties:
+        securityImageId:
+          $ref: '#/components/schemas/SecurityImageId'
+        securityImageName:
+          $ref: '#/components/schemas/SecurityImageName'
+        securityImageCaption:
+          $ref: '#/components/schemas/SecurityImageCaption'
+        securityImageUrl:
+          $ref: '#/components/schemas/SecurityImageUrl'
+    CreateCustomerSecurityImageRequest:
+      type: object
+      properties:
+        securityImageId:
+          $ref: '#/components/schemas/SecurityImageId'
+        securityImageCaption:
+          $ref: '#/components/schemas/SecurityImageCaption'
+    GetSecurityQuestionsResponse:
+      type: object
+      properties:
+        securityQuestions:
+          $ref: '#/components/schemas/SecurityQuestions'
+    SecurityImage:
+      type: object
+      properties:
+        securityImageId:
+          $ref: '#/components/schemas/SecurityImageId'
+        securityImageName:
+          $ref: '#/components/schemas/SecurityImageName'
+        securityImageUrl:
+          $ref: '#/components/schemas/SecurityImageUrl'
+    SecurityImages:
+      type: array
+      items:
+        $ref: '#/components/schemas/SecurityImage'
+    GetSecurityImagesResponse:
+      type: object
+      properties:
+        securityImages:
+          $ref: '#/components/schemas/SecurityImages'
+    InitiateOtpRequest:
+      type: object
+      required:
+        - userName
+      properties:
+        userName:
+          $ref: '#/components/schemas/UserName'
+        templateId:
+          $ref: '#/components/schemas/TemplateId'
+      example:
+        {
+          "userName": "JohnSmith1",
+          "templateId": "REGISTRATION"
+        }
+    ValidateOtpRequest:
+      type: object
+      required:
+        - userName
+        - otp
+      properties:
+        userName:
+          $ref: '#/components/schemas/UserName'
+        otp:
+          $ref: '#/components/schemas/OTP'
+      example:
+        {
+          "userName": "JohnSmith1",
+          "otp": "123463"
+        }

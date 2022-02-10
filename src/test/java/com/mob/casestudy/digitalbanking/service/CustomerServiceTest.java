@@ -2,8 +2,8 @@ package com.mob.casestudy.digitalbanking.service;
 
 import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
-import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.SecurityQuestion;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,9 @@ class CustomerServiceTest {
         String name = "Dipak";
         Customer customer = new Customer();
         Mockito.when(customerRepo.findByUserName(name)).thenReturn(Optional.of(customer));
-        customerService.deleteCustomer(name);
-        Mockito.verify(customerRepo).delete(customer);
+        ResponseEntity<Void> actual = customerService.deleteCustomer(name);
+        ResponseEntity<Object> expected = ResponseEntity.noContent().build();
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -69,14 +71,12 @@ class CustomerServiceTest {
         String name = "Dipak";
         UUID id = UUID.randomUUID();
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
-        List<SecurityQuestionsDto> securityQuestionsList = new ArrayList<>();
-        SecurityQuestionsDto securityQuestionsDto = new SecurityQuestionsDto();
+        List<SecurityQuestion> securityQuestionsList = new ArrayList<>();
+        SecurityQuestion securityQuestionsDto = new SecurityQuestion().securityQuestionId(id.toString()).securityQuestionAnswer("Red");
         SecurityQuestions securityQuestions = new SecurityQuestions();
         Customer customer = new Customer();
 
         securityQuestions.setId(id);
-        securityQuestionsDto.setSecurityQuestionId(id.toString());
-        securityQuestionsDto.setSecurityQuestionAnswer("Red");
         securityQuestionsList.add(securityQuestionsDto);
         securityQuestionsList.add(securityQuestionsDto);
         securityQuestionsList.add(securityQuestionsDto);

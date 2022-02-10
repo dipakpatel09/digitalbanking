@@ -1,7 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.dto.GetSecurityImagesResponse;
-import com.mob.casestudy.digitalbanking.dto.SecurityImagesDto;
+import com.digitalbanking.openapi.model.GetSecurityImagesResponse;
+import com.digitalbanking.openapi.model.SecurityImage;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
 import com.mob.casestudy.digitalbanking.repository.SecurityImagesRepo;
@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
@@ -27,18 +28,23 @@ class SecurityImagesServiceTest {
     @Test
     void getSecurityImages_withEmptySecurityImagesList_shouldThrowException() {
         Mockito.when(securityImagesRepo.findAll()).thenReturn(Collections.emptyList());
-        Assertions.assertThrows(CustomNotFoundException.class, () -> securityImagesService.getSecurityImages());
+        Assertions.assertThrows(CustomNotFoundException.class, () -> securityImagesService.retrieveSecurityImages());
     }
 
     @Test
     void getSecurityImages_withValidSecurityImagesList_shouldReturnSecurityImagesList() {
-        List<SecurityImages> securityImagesList = new ArrayList<>();
-        SecurityImages securityImages = new SecurityImages("What is your favourite TV show?", "http://CustomerTVshow");
-        securityImagesList.add(securityImages);
-        List<SecurityImagesDto> securityImagesDtoList = List.of(securityImages.toDto());
-        GetSecurityImagesResponse expected = new GetSecurityImagesResponse(securityImagesDtoList);
-        Mockito.when(securityImagesRepo.findAll()).thenReturn(securityImagesList);
-        GetSecurityImagesResponse actual = securityImagesService.getSecurityImages();
-        org.assertj.core.api.Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+        UUID uuid = UUID.randomUUID();
+        SecurityImages images = new SecurityImages();
+        images.setId(uuid);
+        images.setSecurityImageName("What is your favourite TV show?");
+        images.setSecurityImageURL("http://CustomerTVshow");
+        SecurityImage securityImage = new SecurityImage().securityImageId(uuid.toString()).securityImageName("What is your favourite TV show?").securityImageUrl("http://CustomerTVshow");
+        List<SecurityImage> securityImageList = List.of(securityImage);
+        List<SecurityImages> securityImages = new ArrayList<>();
+        securityImages.add(images);
+        Mockito.when(securityImagesRepo.findAll()).thenReturn(securityImages);
+        ResponseEntity<GetSecurityImagesResponse> expected = ResponseEntity.ok().body(new GetSecurityImagesResponse().securityImages(securityImageList));
+        ResponseEntity<GetSecurityImagesResponse> actual = securityImagesService.retrieveSecurityImages();
+        org.assertj.core.api.Assertions.assertThat(expected).usingRecursiveComparison().isEqualTo(actual);
     }
 }

@@ -1,7 +1,7 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityQuestionsDto;
-import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.SecurityQuestion;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
 import com.mob.casestudy.digitalbanking.exception.CustomBadRequestException;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
@@ -46,7 +46,7 @@ class SecurityQuestionsServiceTest {
 
     @Test
     void validateSecurityQuestion_withEmptySecurityQuestionList_shouldThrowException() {
-        List<SecurityQuestionsDto> securityQuestions = new ArrayList<>();
+        List<SecurityQuestion> securityQuestions = new ArrayList<>();
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
         Assertions.assertThrows(CustomBadRequestException.class, () -> securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest));
@@ -54,8 +54,8 @@ class SecurityQuestionsServiceTest {
 
     @Test
     void validateSecurityQuestion_withValidSecurityQuestionList_shouldReturnSecurityQuestion() {
-        List<SecurityQuestionsDto> securityQuestions = new ArrayList<>();
-        securityQuestions.add(new SecurityQuestionsDto());
+        List<SecurityQuestion> securityQuestions = new ArrayList<>();
+        securityQuestions.add(new SecurityQuestion());
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
         securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
@@ -63,8 +63,8 @@ class SecurityQuestionsServiceTest {
 
     @Test
     void validateSecurityQuestionSize_withInvalidSize_shouldThrowException() {
-        List<SecurityQuestionsDto> securityQuestions = new ArrayList<>();
-        securityQuestions.add(new SecurityQuestionsDto());
+        List<SecurityQuestion> securityQuestions = new ArrayList<>();
+        securityQuestions.add(new SecurityQuestion());
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
         Assertions.assertThrows(CustomBadRequestException.class, () -> securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest));
@@ -72,10 +72,10 @@ class SecurityQuestionsServiceTest {
 
     @Test
     void validateSecurityQuestionSize_withValidSize_shouldReturnSecurityQuestion() {
-        List<SecurityQuestionsDto> securityQuestions = new ArrayList<>();
-        securityQuestions.add(new SecurityQuestionsDto());
-        securityQuestions.add(new SecurityQuestionsDto());
-        securityQuestions.add(new SecurityQuestionsDto());
+        List<SecurityQuestion> securityQuestions = new ArrayList<>();
+        securityQuestions.add(new SecurityQuestion());
+        securityQuestions.add(new SecurityQuestion());
+        securityQuestions.add(new SecurityQuestion());
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         createCustomerSecurityQuestionsRequest.setSecurityQuestions(securityQuestions);
         securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);

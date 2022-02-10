@@ -2,7 +2,7 @@ package com.mob.casestudy.digitalbanking.service;
 
 import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
 
-import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
+import com.digitalbanking.openapi.model.GetCustomerSecurityImageResponse;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityImages;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
@@ -12,6 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
+
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerSecurityImagesServiceTest {
@@ -26,14 +29,19 @@ class CustomerSecurityImagesServiceTest {
     void getSecurityImageByUserName_withValidCustomer_shouldReturnCustomerSecurityImage() {
         String name = "Dipak";
         SecurityImages securityImages = new SecurityImages();
+        securityImages.setId(UUID.randomUUID());
         Customer customer = new Customer();
         CustomerSecurityImages customerSecurityImages = new CustomerSecurityImages();
         customerSecurityImages.setSecurityImages(securityImages);
         customerSecurityImages.setSecurityImageCaption("Apple");
         customer.setCustomerSecurityImages(customerSecurityImages);
-        CustomerSecurityImagesDto expected = customerSecurityImages.toDto(securityImages);
+
+        GetCustomerSecurityImageResponse customerSecurityImageResponse = customerSecurityImagesService.toDto(customerSecurityImages);
+        ResponseEntity<GetCustomerSecurityImageResponse> expected = ResponseEntity.ok().body(customerSecurityImageResponse);
+
         Mockito.when(customerService.findCustomerByUserName(name, CUS_SEC_IMG_CUS_NOT_FOUND, "User " + name + " not found")).thenReturn(customer);
-        CustomerSecurityImagesDto actual = customerSecurityImagesService.getSecurityImageByUserName(name);
+
+        ResponseEntity<GetCustomerSecurityImageResponse> actual = customerSecurityImagesService.retrieveSecurityImageByUserName(name);
         org.assertj.core.api.Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
 }

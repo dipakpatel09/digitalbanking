@@ -2,12 +2,14 @@ package com.mob.casestudy.digitalbanking.service;
 
 import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
 
-import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.exception.*;
 import com.mob.casestudy.digitalbanking.repository.CustomerRepo;
 import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import com.mob.casestudy.digitalbanking.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,9 +33,10 @@ public class CustomerService {
     CustomerSecurityQuestionsService customerSecurityQuestionsService;
 
     @Transactional
-    public void deleteCustomer(String userName) {
+    public ResponseEntity<Void> deleteCustomer(String userName) {
         Customer customer = findCustomerByUserName(userName, CUS_DELETE_NOT_FOUND, "Invalid User.. " + userName);
         customerRepo.delete(customer);
+        return ResponseEntity.noContent().build();
     }
 
     public Customer findCustomerByUserName(String userName, String errorCode, String errorDescription) {
@@ -41,12 +44,13 @@ public class CustomerService {
     }
 
     @Transactional
-    public void createSecurityQuestions(String userName, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
+    public ResponseEntity<Void> createSecurityQuestions(String userName, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
         Customer customer = validateCustomer(userName);
         securityQuestionsService.validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
         securityQuestionsService.validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
         addCustomerQuestion(customer, createCustomerSecurityQuestionsRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     private Customer validateCustomer(String userName) {
@@ -61,7 +65,7 @@ public class CustomerService {
         for (int i = 0; i < 3; i++) {
             String ansLength = createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionAnswer().trim();
             if (ansLength.length() < 3) {
-                throw new CustomBadRequestException(CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer should be minimum 3 Characters");
+                throw new CustomBadRequestException(CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer should contain min 3 characters");
             }
             CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
             customer.addCustomerSecurityQuestions(customerSecurityQuestions);

@@ -1,6 +1,5 @@
 package com.mob.casestudy.digitalbanking.entity;
 
-import com.mob.casestudy.digitalbanking.dto.SecurityImagesDto;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -61,9 +60,5 @@ public class SecurityImages {
 
     public void setSecurityImageURL(String securityImageURL) {
         this.securityImageURL = securityImageURL;
-    }
-
-    public SecurityImagesDto toDto() {
-        return new SecurityImagesDto(id, securityImageName, securityImageURL);
     }
 }

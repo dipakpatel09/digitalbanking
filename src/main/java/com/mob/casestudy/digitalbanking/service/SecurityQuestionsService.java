@@ -2,7 +2,8 @@ package com.mob.casestudy.digitalbanking.service;
 
 import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
 
-import com.mob.casestudy.digitalbanking.dto.CreateCustomerSecurityQuestionsRequest;
+
+import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
 import com.mob.casestudy.digitalbanking.exception.CustomBadRequestException;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
@@ -22,7 +23,7 @@ public class SecurityQuestionsService {
     public SecurityQuestions validateQuestionId(UUID id) {
         Optional<SecurityQuestions> byId = securityQuestionsRepo.findById(id);
         if (byId.isEmpty()) {
-            throw new CustomNotFoundException(CUS_SEC_QUES_NOT_FOUND, "Customer question not found..");
+            throw new CustomNotFoundException(CUS_SEC_QUES_NOT_FOUND, "Customer security question not found..");
         }
         return byId.get();
     }

@@ -1,6 +1,5 @@
 package com.mob.casestudy.digitalbanking.entity;
 
-import com.mob.casestudy.digitalbanking.dto.CustomerSecurityImagesDto;
 import com.mob.casestudy.digitalbanking.embedded.CustomerSecImage;
 
 import javax.persistence.*;
@@ -78,10 +77,5 @@ public class CustomerSecurityImages {
 
     public void setSecurityImages(SecurityImages securityImages) {
         this.securityImages = securityImages;
-    }
-
-    public CustomerSecurityImagesDto toDto(SecurityImages securityImages) {
-
-        return new CustomerSecurityImagesDto(securityImages.getId(), securityImages.getSecurityImageName(), securityImageCaption, securityImages.getSecurityImageURL());
     }
 }
