@@ -1,26 +1,18 @@
 package com.mob.casestudy.digitalbanking.controller;
 
 import com.digitalbanking.openapi.api.ClientApiApi;
-import com.digitalbanking.openapi.api.ServiceApiApi;
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.digitalbanking.openapi.model.GetCustomerSecurityImageResponse;
-import com.digitalbanking.openapi.model.GetSecurityImagesResponse;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
+import com.mob.casestudy.digitalbanking.service.CustomerSecurityQuestionsService;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
-import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer-service")
-public class OpenApiController implements ServiceApiApi, ClientApiApi {
-
-    @Autowired
-    SecurityImagesService securityImagesService;
+public class ClientApiController implements ClientApiApi {
 
     @Autowired
     CustomerService customerService;
@@ -28,15 +20,8 @@ public class OpenApiController implements ServiceApiApi, ClientApiApi {
     @Autowired
     CustomerSecurityImagesService customerSecurityImagesService;
 
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return ServiceApiApi.super.getRequest();
-    }
-
-    @Override
-    public ResponseEntity<GetSecurityImagesResponse> getSecurityImages() {
-        return securityImagesService.retrieveSecurityImages();
-    }
+    @Autowired
+    CustomerSecurityQuestionsService customerSecurityQuestionsService;
 
     @Override
     public ResponseEntity<Void> deleteCustomerByUserName(String username) {
@@ -50,6 +35,6 @@ public class OpenApiController implements ServiceApiApi, ClientApiApi {
 
     @Override
     public ResponseEntity<Void> createSecurityQuestionsByUserName(String username, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
-        return customerService.createSecurityQuestions(username, createCustomerSecurityQuestionsRequest);
+        return customerSecurityQuestionsService.createSecurityQuestions(username, createCustomerSecurityQuestionsRequest);
     }
 }

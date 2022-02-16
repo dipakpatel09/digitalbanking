@@ -1,6 +1,6 @@
 package com.mob.casestudy.digitalbanking.service;
 
-import static com.mob.casestudy.digitalbanking.errorlist.CustomError.*;
+import static com.mob.casestudy.digitalbanking.customerror.ErrorList.*;
 
 import com.digitalbanking.openapi.model.GetSecurityImagesResponse;
 import com.digitalbanking.openapi.model.SecurityImage;

@@ -42,7 +42,7 @@ public class DigitalbankingApplication implements CommandLineRunner {
         Customer customer = Customer.builder().userName("Dipak004").firstName("Dipak").lastName("Patel").phoneNumber("0123456789").email("abc@gmail.com").status(Status.ACTIVE).preferredLanguage(Language.EN).externalId("dipak007").createdBy("Dipak1").createdOn(LocalDateTime.now()).updatedBy("Dipak2").updatedOn(LocalDateTime.now()).build();
         customerRepo.save(customer);
 
-        CustomerOTP otp = new CustomerOTP("This is OTP", "123456", 1, LocalDateTime.now(), LocalDateTime.now());
+        CustomerOTP otp = new CustomerOTP("This is OTP", "123456", 0, LocalDateTime.now().plusMinutes(1), LocalDateTime.now());
         CustomerSecurityImages customerSecurityImages = new CustomerSecurityImages("Apple", LocalDateTime.now());
         CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions("Iphone", LocalDateTime.now());
         CustomerSecurityQuestions customerSecurityQuestions1 = new CustomerSecurityQuestions("Ahmedabad", LocalDateTime.now());

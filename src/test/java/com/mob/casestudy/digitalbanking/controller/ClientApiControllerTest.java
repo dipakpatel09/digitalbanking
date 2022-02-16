@@ -2,8 +2,8 @@ package com.mob.casestudy.digitalbanking.controller;
 
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
+import com.mob.casestudy.digitalbanking.service.CustomerSecurityQuestionsService;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
-import com.mob.casestudy.digitalbanking.service.SecurityImagesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,13 +12,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class OpenApiControllerTest {
+class ClientApiControllerTest {
 
     @InjectMocks
-    OpenApiController openApiController;
-
-    @Mock
-    SecurityImagesService securityImagesService;
+    ClientApiController clientApiController;
 
     @Mock
     CustomerService customerService;
@@ -26,23 +23,20 @@ class OpenApiControllerTest {
     @Mock
     CustomerSecurityImagesService customerSecurityImagesService;
 
-    @Test
-    void getSecurityImages() {
-        openApiController.getSecurityImages();
-        Mockito.verify(securityImagesService).retrieveSecurityImages();
-    }
+    @Mock
+    CustomerSecurityQuestionsService customerSecurityQuestionsService;
 
     @Test
     void deleteCustomerByUserName() {
         String name = "Dipak";
-        openApiController.deleteCustomerByUserName(name);
+        clientApiController.deleteCustomerByUserName(name);
         Mockito.verify(customerService).deleteCustomer(name);
     }
 
     @Test
     void getSecurityImageByUserName() {
         String name = "Dipak";
-        openApiController.getSecurityImageByUserName(name);
+        clientApiController.getSecurityImageByUserName(name);
         Mockito.verify(customerSecurityImagesService).retrieveSecurityImageByUserName(name);
     }
 
@@ -50,7 +44,7 @@ class OpenApiControllerTest {
     void createSecurityQuestionsByUserName() {
         String name = "Dipak";
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
-        openApiController.createSecurityQuestionsByUserName(name, createCustomerSecurityQuestionsRequest);
-        Mockito.verify(customerService).createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
+        clientApiController.createSecurityQuestionsByUserName(name, createCustomerSecurityQuestionsRequest);
+        Mockito.verify(customerSecurityQuestionsService).createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
     }
 }
