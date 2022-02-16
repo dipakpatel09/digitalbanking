@@ -1,4 +1,4 @@
-package com.mob.casestudy.digitalbanking.service;
+package com.mob.casestudy.digitalbanking.validation;
 
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.digitalbanking.openapi.model.SecurityQuestion;

@@ -5,6 +5,7 @@ import static com.mob.casestudy.digitalbanking.customerror.ErrorList.*;
 import com.digitalbanking.openapi.model.ValidateOtpRequest;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerOTP;
+import com.mob.casestudy.digitalbanking.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

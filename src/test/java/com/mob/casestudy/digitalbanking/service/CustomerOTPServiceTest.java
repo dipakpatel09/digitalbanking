@@ -5,6 +5,7 @@ import static com.mob.casestudy.digitalbanking.customerror.ErrorList.*;
 import com.digitalbanking.openapi.model.ValidateOtpRequest;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerOTP;
+import com.mob.casestudy.digitalbanking.validation.ValidationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

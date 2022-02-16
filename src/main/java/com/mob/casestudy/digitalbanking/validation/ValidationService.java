@@ -1,4 +1,4 @@
-package com.mob.casestudy.digitalbanking.service;
+package com.mob.casestudy.digitalbanking.validation;
 
 import static com.mob.casestudy.digitalbanking.customerror.ErrorList.*;
 
@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Service
 public class ValidationService {
-
 
     @Autowired
     CustomerOTPRepo customerOTPRepo;
