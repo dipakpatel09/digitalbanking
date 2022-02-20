@@ -7,6 +7,7 @@ import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityImages;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
+import com.mob.casestudy.digitalbanking.mapper.CustomerSecurityImagesMapperImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,9 @@ class CustomerSecurityImagesServiceTest {
     @Mock
     CustomerService customerService;
 
+    @Mock
+    CustomerSecurityImagesMapperImpl customerSecurityImagesMapper;
+
     @Test
     void getSecurityImageByUserName_withValidCustomer_shouldReturnCustomerSecurityImage() {
         String name = "Dipak";
@@ -38,7 +42,7 @@ class CustomerSecurityImagesServiceTest {
         customerSecurityImages.setSecurityImageCaption("Apple");
         customer.setCustomerSecurityImages(customerSecurityImages);
 
-        GetCustomerSecurityImageResponse customerSecurityImageResponse = customerSecurityImagesService.toDto(customerSecurityImages);
+        GetCustomerSecurityImageResponse customerSecurityImageResponse = customerSecurityImagesMapper.toDto(customerSecurityImages);
         ResponseEntity<GetCustomerSecurityImageResponse> expected = ResponseEntity.ok().body(customerSecurityImageResponse);
 
         Mockito.when(customerService.findCustomerByUserName(name, CUS_SEC_IMG_CUS_NOT_FOUND, "User " + name + " not found")).thenReturn(customer);

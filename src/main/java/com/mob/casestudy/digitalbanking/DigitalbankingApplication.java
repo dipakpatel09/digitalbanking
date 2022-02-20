@@ -1,8 +1,8 @@
 package com.mob.casestudy.digitalbanking;
 
+import com.mob.casestudy.digitalbanking.enumrator.Language;
 import com.mob.casestudy.digitalbanking.repository.*;
 import com.mob.casestudy.digitalbanking.entity.*;
-import com.mob.casestudy.digitalbanking.enumrator.Language;
 import com.mob.casestudy.digitalbanking.enumrator.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

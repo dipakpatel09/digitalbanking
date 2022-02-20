@@ -2,6 +2,7 @@ package com.mob.casestudy.digitalbanking.validation;
 
 import static com.mob.casestudy.digitalbanking.customerror.ErrorList.*;
 
+import com.digitalbanking.openapi.model.CreateCustomerRequest;
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.digitalbanking.openapi.model.ValidateOtpRequest;
 import com.mob.casestudy.digitalbanking.entity.CustomerOTP;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 public class ValidationService {
@@ -81,6 +83,18 @@ public class ValidationService {
             customerOTP.setOtpRetries(otpRetries + 1);
             customerOTPRepo.save(customerOTP);
             throw new CustomBadRequestException(INVALID_OTP, "Entered OTP is invalid");
+        }
+    }
+
+    public void validateAllField(CreateCustomerRequest createCustomerRequest) {
+        validateField(createCustomerRequest.getPhoneNumber(), "^[0-9]{10}$", PHONE_NO_INVALID_ERROR, "Phone no must be of 10 digit");
+        validateField(createCustomerRequest.getEmail(), "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", EMAIL_ADDRESS_INVALID_ERROR, "Invalid Email");
+        validateField(createCustomerRequest.getUserName(), "^[A-Za-z][A-Za-z0-9_]{7,29}$", USER_NAME_FORMAT_ERROR, "User name is in not valid format");
+    }
+
+    private void validateField(String value, String regexPattern, String errorCode, String errorDescription) {
+        if (!Pattern.compile(regexPattern).matcher(value).matches()) {
+            throw new CustomBadRequestException(errorCode, errorDescription);
         }
     }
 }

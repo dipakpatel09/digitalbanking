@@ -1,9 +1,10 @@
 package com.mob.casestudy.digitalbanking.service;
 
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
+import com.digitalbanking.openapi.model.SecurityQuestion;
 import com.mob.casestudy.digitalbanking.entity.Customer;
-import com.mob.casestudy.digitalbanking.entity.CustomerSecurityQuestions;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
+import com.mob.casestudy.digitalbanking.mapper.CustomerSecurityQuestionsMapperImpl;
 import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import com.mob.casestudy.digitalbanking.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class CustomerSecurityQuestionsService {
     @Autowired
     ValidationService validationService;
 
+    @Autowired
+    CustomerSecurityQuestionsMapperImpl customerSecurityQuestionsMapper;
+
     @Transactional
     public ResponseEntity<Void> createSecurityQuestions(String userName, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest) {
         Customer customer = customerService.findCustomerByUserName(userName, CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + userName);
@@ -47,13 +51,9 @@ public class CustomerSecurityQuestionsService {
 
     private void addCustomerQuestion(Customer customer, CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest, List<SecurityQuestions> securityQuestionsList) {
         for (int i = 0; i < 3; i++) {
-            CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions();
-            customer.addCustomerSecurityQuestions(customerSecurityQuestions);
-            customerSecurityQuestions.setCustomer(customer);
-            customerSecurityQuestions.setSecurityQuestions(validationService.validateQuestionId(UUID.fromString(createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionId()), securityQuestionsList));
-            customerSecurityQuestions.setCreatedOn(LocalDateTime.now());
-            customerSecurityQuestions.setSecurityQuestionAnswer(createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionAnswer());
-            customerSecurityQuestionsRepo.save(customerSecurityQuestions);
+            SecurityQuestions securityQuestions = validationService.validateQuestionId(UUID.fromString(createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i).getSecurityQuestionId()), securityQuestionsList);
+            SecurityQuestion securityQuestion = createCustomerSecurityQuestionsRequest.getSecurityQuestions().get(i);
+            customerSecurityQuestionsRepo.save(customerSecurityQuestionsMapper.fromDto(securityQuestion, customer, securityQuestions, LocalDateTime.now()));
         }
     }
 

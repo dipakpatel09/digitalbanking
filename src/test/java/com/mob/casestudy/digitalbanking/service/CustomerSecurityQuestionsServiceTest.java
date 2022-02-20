@@ -5,6 +5,7 @@ import com.digitalbanking.openapi.model.SecurityQuestion;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityQuestions;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
+import com.mob.casestudy.digitalbanking.mapper.CustomerSecurityQuestionsMapperImpl;
 import com.mob.casestudy.digitalbanking.repository.CustomerSecurityQuestionsRepo;
 import com.mob.casestudy.digitalbanking.validation.ValidationService;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ class CustomerSecurityQuestionsServiceTest {
     @Mock
     ValidationService validationService;
 
+    @Mock
+    CustomerSecurityQuestionsMapperImpl customerSecurityQuestionsMapper;
+
     @Test
     void createSecurityQuestions_withValidSecurityQuestions_shouldCreateCustomerSecurityQuestions() {
         String name = "Dipak";
@@ -56,6 +60,7 @@ class CustomerSecurityQuestionsServiceTest {
         Mockito.when(customerService.findCustomerByUserName(name, CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + name)).thenReturn(customer);
         Mockito.when(validationService.validateQuestionId(id, secQuesList)).thenReturn(securityQuestions);
         Mockito.when(securityQuestionsService.findAllSecurityQuestion()).thenReturn(secQuesList);
+        Mockito.when(customerSecurityQuestionsMapper.fromDto(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any())).thenReturn(new CustomerSecurityQuestions());
         customerSecurityQuestionsService.createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
 
         Mockito.verify(validationService).validateSecurityQuestion(createCustomerSecurityQuestionsRequest);

@@ -1,5 +1,6 @@
 package com.mob.casestudy.digitalbanking.controller;
 
+import com.digitalbanking.openapi.model.CreateCustomerRequest;
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityQuestionsService;
@@ -46,5 +47,12 @@ class ClientApiControllerTest {
         CreateCustomerSecurityQuestionsRequest createCustomerSecurityQuestionsRequest = new CreateCustomerSecurityQuestionsRequest();
         clientApiController.createSecurityQuestionsByUserName(name, createCustomerSecurityQuestionsRequest);
         Mockito.verify(customerSecurityQuestionsService).createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
+    }
+
+    @Test
+    void postCustomers() {
+        CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest();
+        clientApiController.postCustomers(createCustomerRequest);
+        Mockito.verify(customerService).createCustomer(createCustomerRequest);
     }
 }

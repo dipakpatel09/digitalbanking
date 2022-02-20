@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface CustomerRepo extends JpaRepository<Customer, UUID> {
 
     Optional<Customer> findByUserName(String userName);
-
+    boolean existsByUserName(String userName);
 }

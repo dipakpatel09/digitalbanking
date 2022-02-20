@@ -41,6 +41,9 @@ public class Customer {
     @Column(length = 50)
     private String email;
 
+    @Column(length = 3)
+    private String age;
+
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private Status status;

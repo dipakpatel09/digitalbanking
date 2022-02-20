@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5431/DigitalBanking
+    password: ''
+  jpa:
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: 'true'
+server:
+  port: '8098'
+  error:
+    include-stacktrace: never

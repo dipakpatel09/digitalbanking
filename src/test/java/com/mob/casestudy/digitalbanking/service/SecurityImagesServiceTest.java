@@ -4,6 +4,7 @@ import com.digitalbanking.openapi.model.GetSecurityImagesResponse;
 import com.digitalbanking.openapi.model.SecurityImage;
 import com.mob.casestudy.digitalbanking.entity.SecurityImages;
 import com.mob.casestudy.digitalbanking.exception.CustomNotFoundException;
+import com.mob.casestudy.digitalbanking.mapper.SecurityImagesMapperImpl;
 import com.mob.casestudy.digitalbanking.repository.SecurityImagesRepo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class SecurityImagesServiceTest {
     @Mock
     SecurityImagesRepo securityImagesRepo;
 
+    @Mock
+    SecurityImagesMapperImpl securityImagesMapper;
+
     @Test
     void getSecurityImages_withEmptySecurityImagesList_shouldThrowException() {
         Mockito.when(securityImagesRepo.findAll()).thenReturn(Collections.emptyList());
@@ -43,6 +47,7 @@ class SecurityImagesServiceTest {
         List<SecurityImages> securityImages = new ArrayList<>();
         securityImages.add(images);
         Mockito.when(securityImagesRepo.findAll()).thenReturn(securityImages);
+        Mockito.when(securityImagesMapper.toDto(images)).thenReturn(securityImage);
         ResponseEntity<GetSecurityImagesResponse> expected = ResponseEntity.ok().body(new GetSecurityImagesResponse().securityImages(securityImageList));
         ResponseEntity<GetSecurityImagesResponse> actual = securityImagesService.retrieveSecurityImages();
         org.assertj.core.api.Assertions.assertThat(expected).usingRecursiveComparison().isEqualTo(actual);

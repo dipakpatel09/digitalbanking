@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.Objects;
+
 @RestControllerAdvice
 public class CustomizedExceptionResponseHandler extends ResponseEntityExceptionHandler {
 
@@ -48,13 +50,30 @@ public class CustomizedExceptionResponseHandler extends ResponseEntityExceptionH
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(CUS_SEC_QUES_CREATE_FIELD_ERROR, "Security question answer is not in proper format.");
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        if (Objects.requireNonNull(ex.getMessage()).contains("PreferredLanguage")) {
+            exceptionResponse.setErrorCode(PREF_LANG_INVALID_ERROR);
+            exceptionResponse.setErrorDescription("Preferred Language Invalid");
+        } else if (request.getDescription(false).equals("uri=/customer-service/client-api/v1/customers")) {
+            exceptionResponse.setErrorCode(MANDATORY_FIELD_ERROR);
+            exceptionResponse.setErrorDescription("All mandatory field should be validated.");
+        } else {
+            exceptionResponse.setErrorCode(CUS_SEC_QUES_CREATE_FIELD_ERROR);
+            exceptionResponse.setErrorDescription("Security question answer is not in proper format.");
+        }
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(OTP_IS_NULL_OR_EMPTY, "OTP must be of 6 digits");
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        if (request.getDescription(false).equals("uri=/customer-service/client-api/v1/customers")) {
+            exceptionResponse.setErrorCode(MANDATORY_FIELD_ERROR);
+            exceptionResponse.setErrorDescription("Null not accepted");
+        } else {
+            exceptionResponse.setErrorCode(OTP_IS_NULL_OR_EMPTY);
+            exceptionResponse.setErrorDescription("OTP must be of 6 digits");
+        }
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

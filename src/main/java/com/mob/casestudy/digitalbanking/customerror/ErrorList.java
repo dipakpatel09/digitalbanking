@@ -16,4 +16,10 @@ public final class ErrorList {
     public static final String INVALID_OTP = "OTP-VAL-FIE-003";
     public static final String NO_FAILED_OTP_ATTEMPT_EXCEED = "OTP-VAL-FIE-004";
     public static final String CUS_INITIATE_OTP_EXPIRED = "OTP-VAL-FIE-005";
+    public static final String MANDATORY_FIELD_ERROR = "CUS-CREATE-FIE-001";
+    public static final String PHONE_NO_INVALID_ERROR = "CUS-CREATE-FIE-002";
+    public static final String EMAIL_ADDRESS_INVALID_ERROR = "CUS-CREATE-FIE-003";
+    public static final String PREF_LANG_INVALID_ERROR = "CUS-CREATE-FIE-004";
+    public static final String USER_NAME_FORMAT_ERROR = "CUS-CREATE-FIE-005";
+    public static final String USER_NAME_NOT_UNIQUE_ERROR = "CUS-CREATE-FIE-006";
 }

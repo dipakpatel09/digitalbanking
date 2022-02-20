@@ -1,5 +1,6 @@
 package com.mob.casestudy.digitalbanking.validation;
 
+import com.digitalbanking.openapi.model.CreateCustomerRequest;
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.digitalbanking.openapi.model.SecurityQuestion;
 import com.digitalbanking.openapi.model.ValidateOtpRequest;
@@ -107,14 +108,14 @@ class ValidationServiceTest {
     }
 
     @Test
-    void validateOTPForUser_withInvalidOTPLength_shouldThrowExceptionA() {
+    void validateOTP_withInvalidOTPLength_shouldThrowException() {
         ValidateOtpRequest validateOtpRequest = new ValidateOtpRequest();
         validateOtpRequest.setOtp("");
         Assertions.assertThrows(CustomBadRequestException.class, () -> validationService.validateOTP(validateOtpRequest));
     }
 
     @Test
-    void validateOTPForUser_IfOTPTimeIsExpired_shouldThrowException() {
+    void validateOTPExpiryTime_IfOTPTimeIsExpired_shouldThrowException() {
         Customer customer = new Customer();
         CustomerOTP customerOTP = new CustomerOTP();
         customerOTP.setExpiryOn(LocalDateTime.now().minusMinutes(10));
@@ -123,7 +124,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    void validateOTPForUser_IfRemainingTryExceeded_shouldThrowExceptionC() {
+    void validateOTPAttempt_IfRemainingTryExceeded_shouldThrowException() {
         ValidateOtpRequest validateOtpRequest = new ValidateOtpRequest();
         Customer customer = new Customer();
         CustomerOTP customerOTP = new CustomerOTP();
@@ -133,7 +134,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    void validateOTPForUser_withInvalidOTP_shouldThrowExceptionCA() {
+    void validateOTPAttempt_withInvalidOTP_shouldThrowException() {
         ValidateOtpRequest validateOtpRequest = new ValidateOtpRequest();
         validateOtpRequest.setOtp("123789");
         Customer customer = new Customer();
@@ -143,5 +144,29 @@ class ValidationServiceTest {
         customer.setCustomerOTP(customerOTP);
         Mockito.when(customerOTPRepo.save(customerOTP)).thenReturn(customerOTP);
         Assertions.assertThrows(CustomBadRequestException.class, () -> validationService.validateOTPAttempt(customerOTP, validateOtpRequest));
+    }
+
+    @Test
+    void validateAllField_withInvalidPhoneNumber_shouldThrowException() {
+        CreateCustomerRequest createCustomerRequest=new CreateCustomerRequest();
+        createCustomerRequest.setPhoneNumber("12345");
+        Assertions.assertThrows(CustomBadRequestException.class,()->validationService.validateAllField(createCustomerRequest));
+    }
+
+    @Test
+    void validateAllField_withInvalidEmail_shouldThrowExceptionCA() {
+        CreateCustomerRequest createCustomerRequest=new CreateCustomerRequest();
+        createCustomerRequest.setPhoneNumber("0123456789");
+        createCustomerRequest.setEmail("dipak.patel");
+        Assertions.assertThrows(CustomBadRequestException.class,()->validationService.validateAllField(createCustomerRequest));
+    }
+
+    @Test
+    void validateAllField_withInvalidUserName_shouldThrowExceptionCA() {
+        CreateCustomerRequest createCustomerRequest=new CreateCustomerRequest();
+        createCustomerRequest.setPhoneNumber("0123456789");
+        createCustomerRequest.setEmail("dipak.patel@mobiquity.com");
+        createCustomerRequest.setUserName("Dpk");
+        Assertions.assertThrows(CustomBadRequestException.class,()->validationService.validateAllField(createCustomerRequest));
     }
 }
