@@ -41,7 +41,7 @@ public class Customer {
     @Column(length = 50)
     private String email;
 
-    @Column(length = 3)
+    @Column(length = 4)
     private String age;
 
     @Column(length = 20)

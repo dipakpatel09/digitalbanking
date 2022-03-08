@@ -154,7 +154,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    void validateAllField_withInvalidEmail_shouldThrowExceptionCA() {
+    void validateAllField_withInvalidEmail_shouldThrowException() {
         CreateCustomerRequest createCustomerRequest=new CreateCustomerRequest();
         createCustomerRequest.setPhoneNumber("0123456789");
         createCustomerRequest.setEmail("dipak.patel");
@@ -162,7 +162,7 @@ class ValidationServiceTest {
     }
 
     @Test
-    void validateAllField_withInvalidUserName_shouldThrowExceptionCA() {
+    void validateAllField_withInvalidUserName_shouldThrowException() {
         CreateCustomerRequest createCustomerRequest=new CreateCustomerRequest();
         createCustomerRequest.setPhoneNumber("0123456789");
         createCustomerRequest.setEmail("dipak.patel@mobiquity.com");

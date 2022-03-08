@@ -2,6 +2,7 @@ package com.mob.casestudy.digitalbanking.service;
 
 import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
 import com.digitalbanking.openapi.model.SecurityQuestion;
+import com.mob.casestudy.digitalbanking.embedded.CustomerSecQuestion;
 import com.mob.casestudy.digitalbanking.entity.Customer;
 import com.mob.casestudy.digitalbanking.entity.CustomerSecurityQuestions;
 import com.mob.casestudy.digitalbanking.entity.SecurityQuestions;
@@ -60,13 +61,13 @@ class CustomerSecurityQuestionsServiceTest {
         Mockito.when(customerService.findCustomerByUserName(name, CUS_SEC_QUES_CUS_NOT_FOUND, "The requested user not found.. " + name)).thenReturn(customer);
         Mockito.when(validationService.validateQuestionId(id, secQuesList)).thenReturn(securityQuestions);
         Mockito.when(securityQuestionsService.findAllSecurityQuestion()).thenReturn(secQuesList);
-        Mockito.when(customerSecurityQuestionsMapper.fromDto(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any())).thenReturn(new CustomerSecurityQuestions());
+        Mockito.when(customerSecurityQuestionsMapper.fromDto(Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any(),Mockito.any())).thenReturn(new CustomerSecurityQuestions());
         customerSecurityQuestionsService.createSecurityQuestions(name, createCustomerSecurityQuestionsRequest);
 
         Mockito.verify(validationService).validateSecurityQuestion(createCustomerSecurityQuestionsRequest);
         Mockito.verify(validationService).validateSecurityQuestionSize(createCustomerSecurityQuestionsRequest);
         Mockito.verify(validationService).validateSecurityQuestionAnswer(createCustomerSecurityQuestionsRequest);
-        Mockito.verify(customerSecurityQuestionsRepo, Mockito.times(3)).save(Mockito.any());
+        Mockito.verify(customerSecurityQuestionsRepo).saveAll(Mockito.any());
     }
 
     @Test
@@ -79,7 +80,7 @@ class CustomerSecurityQuestionsServiceTest {
     @Test
     void deleteCustomerQuestion_withValidCustomerQuestion_shouldDeleteExistingCustomerQuestion() {
         Customer customer = new Customer();
-        customer.addCustomerSecurityQuestions(new CustomerSecurityQuestions("Ahmedabad", LocalDateTime.now()));
+        customer.addCustomerSecurityQuestions(CustomerSecurityQuestions.builder().customerSecQuestion(new CustomerSecQuestion()).securityQuestionAnswer("Ahmedabad").createdOn(LocalDateTime.now()).build());
         customerSecurityQuestionsService.deleteCustomerQuestion(customer);
         Mockito.verify(customerSecurityQuestionsRepo).deleteAll();
     }

@@ -55,4 +55,12 @@ class ClientApiControllerTest {
         clientApiController.postCustomers(createCustomerRequest);
         Mockito.verify(customerService).createCustomer(createCustomerRequest);
     }
+
+    @Test
+    void getCustomers() {
+        String id = "fa9c1974-0980-49cf-94f4-20aff1399d81";
+        String name = "Dipak";
+        clientApiController.getCustomers(id, name);
+        Mockito.verify(customerService).retrieveCustomer(id, name);
+    }
 }

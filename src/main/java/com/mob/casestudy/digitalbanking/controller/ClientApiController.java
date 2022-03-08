@@ -1,10 +1,7 @@
 package com.mob.casestudy.digitalbanking.controller;
 
 import com.digitalbanking.openapi.api.ClientApiApi;
-import com.digitalbanking.openapi.model.CreateCustomerRequest;
-import com.digitalbanking.openapi.model.CreateCustomerResponse;
-import com.digitalbanking.openapi.model.CreateCustomerSecurityQuestionsRequest;
-import com.digitalbanking.openapi.model.GetCustomerSecurityImageResponse;
+import com.digitalbanking.openapi.model.*;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityImagesService;
 import com.mob.casestudy.digitalbanking.service.CustomerSecurityQuestionsService;
 import com.mob.casestudy.digitalbanking.service.CustomerService;
@@ -43,5 +40,10 @@ public class ClientApiController implements ClientApiApi {
     @Override
     public ResponseEntity<CreateCustomerResponse> postCustomers(CreateCustomerRequest createCustomerRequest) {
         return customerService.createCustomer(createCustomerRequest);
+    }
+
+    @Override
+    public ResponseEntity<GetCustomerResponse> getCustomers(String id, String userName) {
+        return customerService.retrieveCustomer(id, userName);
     }
 }

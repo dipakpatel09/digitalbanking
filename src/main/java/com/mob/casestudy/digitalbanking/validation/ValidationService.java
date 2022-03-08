@@ -89,7 +89,7 @@ public class ValidationService {
     public void validateAllField(CreateCustomerRequest createCustomerRequest) {
         validateField(createCustomerRequest.getPhoneNumber(), "^[0-9]{10}$", PHONE_NO_INVALID_ERROR, "Phone no must be of 10 digit");
         validateField(createCustomerRequest.getEmail(), "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", EMAIL_ADDRESS_INVALID_ERROR, "Invalid Email");
-        validateField(createCustomerRequest.getUserName(), "^[A-Za-z][A-Za-z0-9_]{7,29}$", USER_NAME_FORMAT_ERROR, "User name is in not valid format");
+        validateField(createCustomerRequest.getUserName(), "^[A-Za-z][A-Za-z0-9_]{3,29}$", USER_NAME_FORMAT_ERROR, "User name is in not valid format");
     }
 
     private void validateField(String value, String regexPattern, String errorCode, String errorDescription) {

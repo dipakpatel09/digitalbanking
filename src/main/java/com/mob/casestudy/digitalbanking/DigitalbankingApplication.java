@@ -1,5 +1,8 @@
 package com.mob.casestudy.digitalbanking;
 
+import com.mob.casestudy.digitalbanking.embedded.CustomerOTPId;
+import com.mob.casestudy.digitalbanking.embedded.CustomerSecImage;
+import com.mob.casestudy.digitalbanking.embedded.CustomerSecQuestion;
 import com.mob.casestudy.digitalbanking.enumrator.Language;
 import com.mob.casestudy.digitalbanking.repository.*;
 import com.mob.casestudy.digitalbanking.entity.*;
@@ -41,22 +44,21 @@ public class DigitalbankingApplication implements CommandLineRunner {
 
         Customer customer = Customer.builder().userName("Dipak004").firstName("Dipak").lastName("Patel").phoneNumber("0123456789").email("abc@gmail.com").status(Status.ACTIVE).preferredLanguage(Language.EN).externalId("dipak007").createdBy("Dipak1").createdOn(LocalDateTime.now()).updatedBy("Dipak2").updatedOn(LocalDateTime.now()).build();
         customerRepo.save(customer);
-
-        CustomerOTP otp = new CustomerOTP("This is OTP", "123456", 0, LocalDateTime.now().plusMinutes(1), LocalDateTime.now());
-        CustomerSecurityImages customerSecurityImages = new CustomerSecurityImages("Apple", LocalDateTime.now());
-        CustomerSecurityQuestions customerSecurityQuestions = new CustomerSecurityQuestions("Iphone", LocalDateTime.now());
-        CustomerSecurityQuestions customerSecurityQuestions1 = new CustomerSecurityQuestions("Ahmedabad", LocalDateTime.now());
-        CustomerSecurityQuestions customerSecurityQuestions2 = new CustomerSecurityQuestions("Red", LocalDateTime.now());
+        CustomerOTP otp = CustomerOTP.builder().customerOTPId(new CustomerOTPId()).otpMessage("This is OTP").otp("123456").otpRetries(0).expiryOn(LocalDateTime.now().plusMinutes(1)).createdOn(LocalDateTime.now()).build();
+        CustomerSecurityImages customerSecurityImages = CustomerSecurityImages.builder().customerSecImage(new CustomerSecImage()).securityImageCaption("Apple").createdOn(LocalDateTime.now()).build();
+        CustomerSecurityQuestions customerSecurityQuestions = CustomerSecurityQuestions.builder().customerSecQuestion(new CustomerSecQuestion()).securityQuestionAnswer("Iphone").createdOn(LocalDateTime.now()).build();
+        CustomerSecurityQuestions customerSecurityQuestions1 = CustomerSecurityQuestions.builder().customerSecQuestion(new CustomerSecQuestion()).securityQuestionAnswer("Ahmedabad").createdOn(LocalDateTime.now()).build();
+        CustomerSecurityQuestions customerSecurityQuestions2 = CustomerSecurityQuestions.builder().customerSecQuestion(new CustomerSecQuestion()).securityQuestionAnswer("Red").createdOn(LocalDateTime.now()).build();
 
         otp.setCustomer(customer);
 
-        SecurityQuestions questions = securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Phone?"));
-        SecurityQuestions questions1 = securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Place?"));
-        SecurityQuestions questions2 = securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Color?"));
-        securityQuestionsRepo.save(new SecurityQuestions("What is your favourite Food?"));
+        SecurityQuestions questions = securityQuestionsRepo.save(SecurityQuestions.builder().securityQuestionText("What is your favourite Phone?").build());
+        SecurityQuestions questions1 = securityQuestionsRepo.save(SecurityQuestions.builder().securityQuestionText("What is your favourite Place?").build());
+        SecurityQuestions questions2 = securityQuestionsRepo.save(SecurityQuestions.builder().securityQuestionText("What is your favourite Color?").build());
+        securityQuestionsRepo.save(SecurityQuestions.builder().securityQuestionText("What is your favourite Food?").build());
 
-        SecurityImages images = securityImagesRepo.save(new SecurityImages("What is your favourite Logo?", "http://CustomerLogo"));
-        securityImagesRepo.save(new SecurityImages("What is your favourite TV show?", "http://CustomerTVshow"));
+        SecurityImages images = securityImagesRepo.save(SecurityImages.builder().securityImageName("What is your favourite Logo?").securityImageURL("http://CustomerLogo").build());
+        securityImagesRepo.save(SecurityImages.builder().securityImageName("What is your favourite TV show?").securityImageURL("http://CustomerTVshow").build());
 
         customerSecurityQuestions.setCustomer(customer);
         customerSecurityQuestions1.setCustomer(customer);

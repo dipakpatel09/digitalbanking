@@ -52,7 +52,7 @@ class CustomerSecurityImagesServiceTest {
     }
 
     @Test
-    void getSecurityImageByUserName__withNullCustomerSecurityImage_shouldThrowException() {
+    void getSecurityImageByUserName_withNullCustomerSecurityImage_shouldThrowException() {
         String name = "Dipak";
         Customer customer = new Customer();
         customer.setCustomerSecurityImages(null);

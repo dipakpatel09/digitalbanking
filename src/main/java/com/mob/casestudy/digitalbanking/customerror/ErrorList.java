@@ -22,4 +22,7 @@ public final class ErrorList {
     public static final String PREF_LANG_INVALID_ERROR = "CUS-CREATE-FIE-004";
     public static final String USER_NAME_FORMAT_ERROR = "CUS-CREATE-FIE-005";
     public static final String USER_NAME_NOT_UNIQUE_ERROR = "CUS-CREATE-FIE-006";
+    public static final String CUS_FIELD_VALIDATION_ERROR = "CUS-GET-FIE-001";
+    public static final String CUS_NOT_FOUND_ERROR = "CUS-GET-NFD-001";
+    public static final String CUS_NOT_FOUND_DESCRIPTION = "Customer not found";
 }

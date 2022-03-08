@@ -38,7 +38,7 @@ public class CustomizedExceptionResponseHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(NullPointerException.class)
     public final ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
-        ExceptionResponse exceptionResponse = new ExceptionResponse(CUS_SEC_QUES_VALIDATE_ERROR, "Security question answer can't be Null");
+        ExceptionResponse exceptionResponse = new ExceptionResponse(CUS_SEC_QUES_VALIDATE_ERROR, "Security question id or answer can't be Null");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 
